@@ -6,6 +6,10 @@
 #define PA2_LS2015_SEMESTRALKA_PLAYER_H
 
 #include <string>
+#include "Piece.h"
+
+// Forward declaration to avoid circular dependency problems
+class Piece;
 
 using namespace std;
 
@@ -14,7 +18,9 @@ class Player
 public:
     string name;
 
-    void WaitForInput();
+    pair< int, pair< int, int > > WaitForInput();
+    bool haveAnyTurns() const;
+    Piece * getPiece( int index ) const;
 };
 
 

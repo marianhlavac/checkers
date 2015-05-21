@@ -3,3 +3,8 @@
 //
 
 #include "Piece.h"
+
+void Piece::moveTo( int newLocation )
+{
+
+}

@@ -3,14 +3,8 @@
 //
 
 #include "Console.h"
-#include "SingletonInstantiationException.h"
 
-Console::Console()
-{
-    throw SingletonInstantiationException();
-}
-
-int Console::parseCommandLineArguments( int argc, char *argv[] )
+int Console::parseCmdln( int argc, char *argv[] )
 {
     return COMMAND_PLAY;
 }

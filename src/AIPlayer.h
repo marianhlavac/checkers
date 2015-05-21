@@ -5,7 +5,7 @@
 #ifndef PA2_LS2015_SEMESTRALKA_AIPLAYER_H
 #define PA2_LS2015_SEMESTRALKA_AIPLAYER_H
 
-#include "Player.h";
+#include "Player.h"
 
 class AIPlayer : public Player
 {

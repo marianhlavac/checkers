@@ -11,15 +11,9 @@ public:
     static const int COMMAND_PLAY = 0, COMMAND_LOAD = 1;
 
     /**
-     * todo:
-     * todo: throws singletonisnta...
-     */
-    Console();
-
-    /**
      * Processes the command line arguments
      */
-    static int parseCommandLineArguments( int argc, char *argv[] );
+    static int parseCmdln( int argc, char *argv[] );
 };
 
 

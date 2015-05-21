@@ -1,20 +1,38 @@
 #include <cstdio>
 #include <iostream>
 
+#include "GameController.h"
 #include "Player.h"
 #include "Console.h"
 #include "UIRenderer.h"
-#include "GameController.h"
+
+#define  SPLASH_SCREEN_TIME  1
 
 using namespace std;
 
 int main( int argc, char *argv[] ) {
 
-    int cmdlineCommand = Console::parseCommandLineArguments( argc, argv );
+    GameController gameController;
 
-    // Initialize GameController object
-    GameController::renderer = UIRenderer();
-    // todo: bude existovat podìdìný UIUnicodeRenderer, který bude èmárat junikódy
+    // Parse command line arguments
+    int cmdlineCommand = Console::parseCmdln( argc, argv );
+
+    // Set active renderer
+    gameController.renderer = new UIRenderer( &gameController );
+
+    // Show splash screen
+    gameController.renderer->showSplashScreen();
+    gameController.delay( SPLASH_SCREEN_TIME );
+    gameController.renderer->flushScreen();
+
+    cout << "Game ready..." << endl;
+
+    /*while ( ! gameController.gameHasEnded )
+    {*/
+        gameController.tick();
+    /*}*/
+
+
 
     return 0;
 
