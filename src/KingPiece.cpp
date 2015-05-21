@@ -3,3 +3,8 @@
 //
 
 #include "KingPiece.h"
+
+KingPiece::KingPiece( Player *owner, GameController *parent, int location ) : Piece( owner, parent, location )
+{
+
+}

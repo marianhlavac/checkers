@@ -10,39 +10,41 @@
 
 // Forward declaration to avoid circular dependency problems
 class UIRenderer;
+class Piece;
+class Player;
 
 class GameController
 {
 public:
     static int instances;
-    static const int MODE_NOTSET = -1, MODE_SP = 0, MODE_MPVSAI = 1, MODE_MPVSLOCAL = 2, MODE_MPVSNETWORK = 3;
+    static const int MODE_NOTSET = -1, MODE_SP = 0, MODE_MPVSAI = 1, MODE_MPVSNETWORK = 2;
 
     int turn = 0, gameMode = MODE_NOTSET, ticks = 0, winner = -1;
-    bool gameHasEnded;
+    bool gameHasEnded, jumpSequence = false, invalidInput = false;
     UIRenderer * renderer;
 
-    /**
-     * todo:
-     * todo: throws singletonisnta...
-     */
+    static std::string translateCoords( int location );
+    static int translateCoords( std::string location );
+
     GameController( );
-
     void prepareGame( );
-
-    /**
-     * Tick - the main
-     */
     void tick( );
     void delay( int s );
     void gameOver( int winner );
+    Piece *getPiece( int index ) const;
+    void setPiece( int index, Piece * piece );
+    Piece *getPieceRelative( int from, int byx, int byy ) const;
+    int numOfPossibleTurns() const;
+    int numOfPossibleTurns( Player *player ) const;
 
 private:
     Player * firstplayer, * secondplayer;
     Piece ** field;
 
-    bool isTurnValid( pair< int, pair< int, int > > turn ) const;
+    bool isTurnValid( std::pair< int, int > turn ) const;
     void discardAnyBetween( int from, int to );
     bool isJumpSequence() const;
+    void endOfTurn();
 };
 
 

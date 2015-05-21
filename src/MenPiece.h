@@ -9,7 +9,12 @@
 
 class MenPiece : public Piece
 {
+public:
+    const int type = TYPE_MEN;
 
+    MenPiece( Player *owner, GameController *parent, int location );
+    std::vector<int> findAllMoves();
+    int numOfPossibleMoves();
 };
 
 

@@ -17,10 +17,9 @@ class Player
 {
 public:
     string name;
+    char color = 'w';
 
-    pair< int, pair< int, int > > WaitForInput();
-    bool haveAnyTurns() const;
-    Piece * getPiece( int index ) const;
+    virtual pair< int, int > WaitForInput() = 0;
 };
 
 

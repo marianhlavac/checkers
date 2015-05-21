@@ -9,7 +9,8 @@
 
 class LocalPlayer : public Player
 {
-
+public:
+    pair<int, int> WaitForInput( );
 };
 
 

@@ -25,12 +25,16 @@ int main( int argc, char *argv[] ) {
     gameController.delay( SPLASH_SCREEN_TIME );
     gameController.renderer->flushScreen();
 
+    gameController.prepareGame();
     cout << "Game ready..." << endl;
 
-    /*while ( ! gameController.gameHasEnded )
-    {*/
+    // First redraw
+    gameController.renderer->redraw();
+
+    while ( ! gameController.gameHasEnded )
+    {
         gameController.tick();
-    /*}*/
+    }
 
 
 

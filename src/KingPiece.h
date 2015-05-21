@@ -9,7 +9,10 @@
 
 class KingPiece : public Piece
 {
+public:
+    const int type = TYPE_KING;
 
+    KingPiece( Player *owner, GameController *parent, int location );
 };
 
 
