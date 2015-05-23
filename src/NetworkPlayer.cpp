@@ -3,3 +3,8 @@
 //
 
 #include "NetworkPlayer.h"
+
+pair<int, int> NetworkPlayer::WaitForInput( )
+{
+    return make_pair( 0, 0 );
+}

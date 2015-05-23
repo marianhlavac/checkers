@@ -9,7 +9,7 @@
 
 class AIPlayer : public Player
 {
-
+    pair<int, int> WaitForInput( );
 };
 
 

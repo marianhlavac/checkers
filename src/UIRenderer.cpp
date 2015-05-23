@@ -72,7 +72,7 @@ void UIRenderer::drawHeader( ) const
         drawLogoLine( i );
 
         if ( i == 1 ) cout << std::string( 32, ' ' ) << "Tick " << parent->ticks;
-        if ( i == 3 ) cout << std::string( 12, ' ' ) << (parent->gameMode == parent->MODE_SP ? "Playing singleplayer" : "Playing other mode");
+        if ( i == 3 ) cout << std::string( 12, ' ' ) << (parent->gameMode == parent->MODE_VSLOC ? "Versus local" : "Versus AI");
 
         cout << endl;
     }

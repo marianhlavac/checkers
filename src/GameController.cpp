@@ -15,6 +15,7 @@
 #include "MenPiece.h"
 #include "LocalPlayer.h"
 #include "AIPlayer.h"
+#include "NetworkPlayer.h"
 
 int GameController::instances = 0;
 
@@ -107,10 +108,34 @@ void GameController::prepareGame( )
     cout << "Preparing the game..." << endl;
 
     // Create players
-    firstplayer = new LocalPlayer();
-    secondplayer = new LocalPlayer();
-    firstplayer->color = 'w';
-    secondplayer->color = 'b';
+    if ( gameMode == MODE_VSLOC )
+    {
+        firstplayer = new LocalPlayer();
+        secondplayer = new LocalPlayer();
+    }
+    else if ( gameMode == MODE_VSAI )
+    {
+        firstplayer = new LocalPlayer();
+        secondplayer = new AIPlayer();
+    }
+    else if ( gameMode == MODE_VSNET )
+    {
+        firstplayer = new LocalPlayer();
+        secondplayer = new NetworkPlayer();
+    }
+
+    // Assign colors to players
+    if ( gameMode == MODE_VSNET )
+    {
+        // todo: make sure the colors are correctly assigned
+        firstplayer->color = 'w';
+        secondplayer->color = 'b';
+    }
+    else
+    {
+        firstplayer->color = 'w';
+        secondplayer->color = 'b';
+    }
 
     // Create field of pieces
     field = new Piece*[64];
@@ -133,7 +158,7 @@ void GameController::prepareGame( )
     }
 
     // Set mode for local todo: temporary
-    gameMode = MODE_SP;
+    gameMode = MODE_VSLOC;
 }
 
 void GameController::gameOver( int winner )

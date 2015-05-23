@@ -9,7 +9,7 @@
 
 class NetworkPlayer : public Player
 {
-
+    pair<int, int> WaitForInput( );
 };
 
 

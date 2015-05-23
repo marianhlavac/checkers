@@ -17,7 +17,7 @@ class GameController
 {
 public:
     static int instances;
-    static const int MODE_NOTSET = -1, MODE_SP = 0, MODE_MPVSAI = 1, MODE_MPVSNETWORK = 2;
+    static const int MODE_NOTSET = -1, MODE_VSLOC = 0, MODE_VSAI = 1, MODE_VSNET = 2;
 
     int turn = 0, gameMode = MODE_NOTSET, ticks = 0, winner = -1;
     bool gameHasEnded, jumpSequence = false, invalidInput = false;
