@@ -17,8 +17,8 @@ class Player;
 class GameController
 {
 public:
-    static int instances;
     static const int MODE_NOTSET = -1, MODE_VSLOC = 0, MODE_VSAI = 1, MODE_VSNET = 2;
+    static int instances;
     int gameMode = MODE_NOTSET, ticks = 0;
     bool gameHasEnded, jumpSequence = false, invalidInput = false;
     Player * onTurn = nullptr, * winner = nullptr;
@@ -43,11 +43,11 @@ public:
 private:
     bool isTurnValid( std::pair< int, int > turn ) const;
     void discardAnyBetween( int from, int to );
-    bool isJumpSequence( ) const;
+    bool isJumpSequence( );
     void endOfTurn( );
     void conversionToKings( );
     void gameOver( Player * winner );
-    void findPossibleTurns( Player * player );
+    void findPossibleTurns( Player * player, bool * isJumps = nullptr );
 
     Piece ** field;
 };

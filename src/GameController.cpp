@@ -27,10 +27,12 @@ GameController::GameController()
 
 void GameController::tick()
 {
+    bool jumpAvailable = false;
+
     // Find all possible moves / jumps and set as state
     possibleTurns.clear();
-    findPossibleTurns( firstplayer );
-    findPossibleTurns( secondplayer );
+    findPossibleTurns( firstplayer, firstplayer == onTurn ? &jumpAvailable : nullptr );
+    findPossibleTurns( secondplayer, secondplayer == onTurn ? &jumpAvailable : nullptr );
 
     // Check game end conditions
     if ( numOfPossibleTurns( firstplayer ) == 0 )
@@ -76,7 +78,7 @@ void GameController::tick()
     conversionToKings();
 
     // Detect jump sequence or pass the turn
-    if ( !( jumpSequence = isJumpSequence( ) ) ) endOfTurn( );
+    if ( ! ( jumpAvailable && ( jumpSequence = isJumpSequence( ) ) ) ) endOfTurn( );
 
     // Make one step forward ( +1 tick )
     cout << "End of tick " << ticks << "...";
@@ -190,9 +192,15 @@ void GameController::discardAnyBetween( int from, int to )
     }
 }
 
-bool GameController::isJumpSequence( ) const
+bool GameController::isJumpSequence( )
 {
-    return false;
+    bool isJump = false;
+
+    // Refresh possible turns
+    findPossibleTurns( onTurn, &isJump );
+
+    // If any jump available, it's sequence
+    return isJump;
 }
 
 void GameController::endOfTurn( )
@@ -285,7 +293,7 @@ bool GameController::outOfFieldRelative( int from, int byx, int byy ) const
     return from + byx + ( byy * 8 ) > 63 || from + byx + ( byy * 8 ) < 0 || (from + byx) / 8 != from / 8;
 }
 
-void GameController::findPossibleTurns( Player * player )
+void GameController::findPossibleTurns( Player * player, bool * isJumps )
 {
     vector<pair<int,int>> moves, jumps;
 
@@ -306,4 +314,5 @@ void GameController::findPossibleTurns( Player * player )
 
     // If there is any possible jump, moves can't be done
     possibleTurns[ player ] = jumps.size() > 0 ? jumps : moves;
+    if ( isJumps != nullptr ) *isJumps = jumps.size() > 0;
 }
