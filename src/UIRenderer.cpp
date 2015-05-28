@@ -7,6 +7,7 @@
 #include <fstream>
 #include "UIRenderer.h"
 #include "GameController.h"
+#include "Console.h"
 
 #define LEFT_MARGIN     6
 
@@ -41,17 +42,10 @@ void UIRenderer::redraw( ) const
 
     // Debug: Print all possible turns
     cout << endl << endl << std::string( LEFT_MARGIN , ' ' ) << "--- Possible moves: " << std::string( 27, '-') << endl;
-    for ( int i = 0; i < 64; i++ )
-    {
-        if ( parent->getPiece( i ) != nullptr )
-        {
-            vector<int> moves = parent->getPiece( i )->findAllMoves();
 
-            for ( int move : moves )
-            {
-                cout << parent->translateCoords( i ) << " -> " << parent->translateCoords( move ) << ", ";
-            }
-        }
+    for ( pair<int,int> move : parent->possibleTurns[ parent->onTurn ] )
+    {
+        cout << Console::translateCoords( move.first ) << " -> " << Console::translateCoords( move.second ) << ", ";
     }
 
     // Draw input prompt
@@ -142,9 +136,9 @@ void UIRenderer::drawFieldLine( int line ) const
                 char pieceChar = '!';
 
                 if ( piece->owner->color == 'b' )
-                    pieceChar = (piece->type == 2 ? BKING_CHAR : BMEN_CHAR);
+                    pieceChar = (piece->type == piece->TYPE_KING ? BKING_CHAR : BMEN_CHAR);
                 else if ( piece->owner->color == 'w' )
-                    pieceChar = (piece->type == 2 ? WKING_CHAR : WMEN_CHAR);
+                    pieceChar = (piece->type == piece->TYPE_KING ? WKING_CHAR : WMEN_CHAR);
 
                 cout << " " << pieceChar << " ";
             }
@@ -155,5 +149,29 @@ void UIRenderer::drawInfoboxLine( int line ) const
 {
     cout << "> ";
     if ( line == 0 ) cout << "This is infobox";
-    if ( line == 2 ) cout << "Player " << parent->turn << " is on turn.";
+    if ( line == 2 ) cout << parent->onTurn->name << " is on turn.";
+}
+
+void UIRenderer::drawGameoverScreen( ) const
+{
+    // Clear screen
+    flushScreen();
+
+    // Draw header
+    drawHeader();
+
+    // Vspace between header and field
+    cout << endl << endl;
+
+    // Draw result
+    if ( parent->winner == nullptr )
+    {
+        // It's draw
+        cout << "DRAW!" << endl;
+    }
+    else
+    {
+        cout << parent->winner->name << " WINS!" << endl;
+    }
+
 }

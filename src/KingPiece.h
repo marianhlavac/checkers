@@ -10,9 +10,9 @@
 class KingPiece : public Piece
 {
 public:
-    const int type = TYPE_KING;
-
     KingPiece( Player *owner, GameController *parent, int location );
+    std::pair< std::vector<int>, std::vector<int> > findAllMoves();
+    std::pair< std::vector<int>, std::vector<int> > diagonalSearch( int dirx, int diry );
 };
 
 

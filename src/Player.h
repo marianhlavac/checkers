@@ -2,14 +2,16 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_PLAYER_H
-#define PA2_LS2015_SEMESTRALKA_PLAYER_H
+#ifndef CHECKERS_PLAYER_H
+#define CHECKERS_PLAYER_H
 
 #include <string>
 #include "Piece.h"
+#include "GameController.h"
 
 // Forward declaration to avoid circular dependency problems
 class Piece;
+class GameController;
 
 using namespace std;
 
@@ -19,8 +21,12 @@ public:
     string name;
     char color = 'w';
 
+    Player( GameController *parent );
     virtual pair< int, int > WaitForInput() = 0;
+
+protected:
+    GameController *parent;
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_PLAYER_H
+#endif //CHECKERS_PLAYER_H

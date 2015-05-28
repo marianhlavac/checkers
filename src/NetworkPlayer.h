@@ -2,15 +2,17 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_NETWORKPLAYER_H
-#define PA2_LS2015_SEMESTRALKA_NETWORKPLAYER_H
+#ifndef CHECKERS_NETWORKPLAYER_H
+#define CHECKERS_NETWORKPLAYER_H
 
 #include "Player.h"
 
 class NetworkPlayer : public Player
 {
+public:
+    NetworkPlayer( GameController * parent );
     pair<int, int> WaitForInput( );
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_NETWORKPLAYER_H
+#endif //CHECKERS_NETWORKPLAYER_H

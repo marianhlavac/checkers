@@ -2,8 +2,8 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_PIECE_H
-#define PA2_LS2015_SEMESTRALKA_PIECE_H
+#ifndef CHECKERS_PIECE_H
+#define CHECKERS_PIECE_H
 
 #include <vector>
 #include "Player.h"
@@ -18,18 +18,18 @@ class Piece
 public:
     Player *owner;
     GameController *parent;
-    static const int TYPE_MEN = 1, TYPE_KING = 2;
-    const int type = 0;
+    static const int TYPE_NONE = 0, TYPE_MEN = 1, TYPE_KING = 2;
+    const int type;
 
-    Piece( Player *owner, GameController *parent, int location );
+    Piece( Player *owner, GameController *parent, int location, int type );
     void moveTo( int newLocation );
 
-    virtual std::vector<int> findAllMoves() = 0;
-    virtual int numOfPossibleMoves() = 0;
+    virtual std::pair< std::vector<int>, std::vector<int> > findAllMoves() = 0;
+    int numOfPossibleMoves();
 
 protected:
     int location = -1;
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_PIECE_H
+#endif //CHECKERS_PIECE_H

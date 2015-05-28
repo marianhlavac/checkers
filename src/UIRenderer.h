@@ -2,8 +2,8 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_UIRENDERER_H
-#define PA2_LS2015_SEMESTRALKA_UIRENDERER_H
+#ifndef CHECKERS_UIRENDERER_H
+#define CHECKERS_UIRENDERER_H
 
 #include <string>
 
@@ -21,6 +21,7 @@ public:
     void redraw( ) const;
     void flushScreen( ) const;
     void showSplashScreen( ) const;
+    void drawGameoverScreen( ) const;
 
     virtual void drawHeader( ) const;
     virtual void drawField( ) const;
@@ -37,4 +38,4 @@ private:
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_UIRENDERER_H
+#endif //CHECKERS_UIRENDERER_H

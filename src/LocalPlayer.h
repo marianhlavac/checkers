@@ -2,16 +2,17 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_LOCALPLAYER_H
-#define PA2_LS2015_SEMESTRALKA_LOCALPLAYER_H
+#ifndef CHECKERS_LOCALPLAYER_H
+#define CHECKERS_LOCALPLAYER_H
 
 #include "Player.h"
 
 class LocalPlayer : public Player
 {
 public:
+    LocalPlayer( GameController * parent );
     pair<int, int> WaitForInput( );
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_LOCALPLAYER_H
+#endif //CHECKERS_LOCALPLAYER_H

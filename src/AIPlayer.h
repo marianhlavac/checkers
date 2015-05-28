@@ -2,15 +2,17 @@
 // Created by Marián on 11. 5. 2015.
 //
 
-#ifndef PA2_LS2015_SEMESTRALKA_AIPLAYER_H
-#define PA2_LS2015_SEMESTRALKA_AIPLAYER_H
+#ifndef CHECKERS_AIPLAYER_H
+#define CHECKERS_AIPLAYER_H
 
 #include "Player.h"
 
 class AIPlayer : public Player
 {
+public:
+    AIPlayer( GameController * parent );
     pair<int, int> WaitForInput( );
 };
 
 
-#endif //PA2_LS2015_SEMESTRALKA_AIPLAYER_H
+#endif //CHECKERS_AIPLAYER_H

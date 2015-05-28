@@ -1,5 +1,5 @@
 //
-// Created by Mari·n on 11. 5. 2015.
+// Created by Mari√°n on 11. 5. 2015.
 //
 #include <ctime>
 #include <iostream>
@@ -16,39 +16,21 @@
 #include "LocalPlayer.h"
 #include "AIPlayer.h"
 #include "NetworkPlayer.h"
+#include "KingPiece.h"
 
 int GameController::instances = 0;
 
 GameController::GameController()
 {
-    instances++;
-
-    if ( instances > 1 ) throw SingletonInstantiationException();
-}
-
-std::string GameController::translateCoords( int location )
-{
-    stringstream ss;
-    int col = location % 8, row = location / 8;
-    ss << (char)( 65 + col ) << (row + 1);
-    return ss.str();
-}
-
-int GameController::translateCoords( std::string location )
-{
-    int col = -1, row = -1;
-
-    if ( location[0] >= 65 && location[0] <= 72 ) col = location[0] - 65;
-    if ( location[0] >= 97 && location[0] <= 104 ) col = location[0] - 97;
-    if ( location[1] >= 49 && location[1] <= 57 ) row = location[1] - 49;
-
-    return ( col == -1 || row == -1 ? -1 : row * 8 + col );
+    if ( ++instances > 1 ) throw SingletonInstantiationException();
 }
 
 void GameController::tick()
 {
-    // What player is playing now?
-    Player *playerOnTurn = turn == 0 ? firstplayer : secondplayer;
+    // Find all possible moves / jumps and set as state
+    possibleTurns.clear();
+    findPossibleTurns( firstplayer );
+    findPossibleTurns( secondplayer );
 
     // Check game end conditions
     if ( numOfPossibleTurns( firstplayer ) == 0 )
@@ -56,16 +38,16 @@ void GameController::tick()
         // It could be draw
         if ( numOfPossibleTurns( secondplayer ) == 0 )
         {
-            gameOver( 3 );
+            gameOver( nullptr );
             return;
         }
 
-        gameOver( 1 );
+        gameOver( secondplayer );
         return;
     }
     else if ( numOfPossibleTurns( secondplayer ) == 0 )
     {
-        gameOver( 2 );
+        gameOver( firstplayer );
         return;
     }
 
@@ -74,16 +56,24 @@ void GameController::tick()
     do
     {
         if ( inputTurn.first != INTMAX_MIN ) renderer->redraw();
-        inputTurn = playerOnTurn->WaitForInput( );
+        inputTurn = onTurn->WaitForInput( );
+        if ( inputTurn == pair<int,int>( -2, -2 ) )
+        {
+            gameHasEnded = true;
+            break;
+        }
         invalidInput = true;
     }
     while ( ! isTurnValid( inputTurn ) );
 
     invalidInput = false;
 
+    if ( gameHasEnded ) return;
+
     // Manipulate pieces and other objects on field
     getPiece( inputTurn.first )->moveTo( inputTurn.second );
     discardAnyBetween( inputTurn.first, inputTurn.second );
+    conversionToKings();
 
     // Detect jump sequence or pass the turn
     if ( !( jumpSequence = isJumpSequence( ) ) ) endOfTurn( );
@@ -107,21 +97,23 @@ void GameController::prepareGame( )
 {
     cout << "Preparing the game..." << endl;
 
+    gameHasEnded = false;
+
     // Create players
     if ( gameMode == MODE_VSLOC )
     {
-        firstplayer = new LocalPlayer();
-        secondplayer = new LocalPlayer();
+        firstplayer = new LocalPlayer( this );
+        secondplayer = new LocalPlayer( this );
     }
     else if ( gameMode == MODE_VSAI )
     {
-        firstplayer = new LocalPlayer();
-        secondplayer = new AIPlayer();
+        firstplayer = new LocalPlayer( this );
+        secondplayer = new AIPlayer( this );
     }
     else if ( gameMode == MODE_VSNET )
     {
-        firstplayer = new LocalPlayer();
-        secondplayer = new NetworkPlayer();
+        firstplayer = new LocalPlayer( this );
+        secondplayer = new NetworkPlayer( this );
     }
 
     // Assign colors to players
@@ -136,6 +128,10 @@ void GameController::prepareGame( )
         firstplayer->color = 'w';
         secondplayer->color = 'b';
     }
+
+    // Set players names
+    firstplayer->name = "Player 1";
+    secondplayer->name = "Player 2";
 
     // Create field of pieces
     field = new Piece*[64];
@@ -159,32 +155,39 @@ void GameController::prepareGame( )
 
     // Set mode for local todo: temporary
     gameMode = MODE_VSLOC;
+
+    // Determine who's starting the game todo: this doesn't work
+    onTurn = firstplayer;
 }
 
-void GameController::gameOver( int winner )
+void GameController::gameOver( Player * winner )
 {
     this->winner = winner;
     gameHasEnded = true;
 
+    // Announce the game ending
+    renderer->drawGameoverScreen();
 }
 
 bool GameController::isTurnValid( pair<int, int> turn ) const
 {
-    // Range check
-    if ( turn.first < 0 || turn.first > 63 || turn.second < 0 || turn.second > 63 ) return false;
-
-    // Does the from piece exists and is correct ownership?
-    if ( getPiece( turn.first ) != nullptr && getPiece( turn.first )->owner == ( this->turn == 0 ? firstplayer : secondplayer ) )
-    {
-        vector<int> possibleMoves = getPiece( turn.first )->findAllMoves();
-        return find( possibleMoves.begin(), possibleMoves.end(), turn.second ) != possibleMoves.end();
-    }
-    else return false;
+    return find( possibleTurns.at(onTurn).begin(), possibleTurns.at(onTurn).end(), turn ) != possibleTurns.at(onTurn).end();
 }
 
 void GameController::discardAnyBetween( int from, int to )
 {
+    cout << "Magnitude was: " << getMoveMagnitude( from, to );
+    if ( getMoveMagnitude( from, to ) >= 2 )
+    {
+        // Get correct piece
+        int dir = getMoveDirection( from, to );
+        Piece *piece = getPieceRelative( from, dir > 1 ? -1 : 1, dir < 3 && dir > 0 ? 1 : -1 );
 
+        if ( piece == nullptr ) throw runtime_error( "Missing piece between last move!" );
+
+        delete piece;
+        setPieceRelative( from, dir > 1 ? -1 : 1, dir < 3 && dir > 0 ? 1 : -1, nullptr );
+    }
 }
 
 bool GameController::isJumpSequence( ) const
@@ -194,7 +197,8 @@ bool GameController::isJumpSequence( ) const
 
 void GameController::endOfTurn( )
 {
-    turn = turn == 1 ? 0 : 1;
+    // Toggle between players
+    onTurn = onTurn == firstplayer ? secondplayer : firstplayer;
 }
 
 Piece *GameController::getPiece( int index ) const
@@ -217,20 +221,89 @@ Piece *GameController::getPieceRelative( int from, int byx, int byy ) const
 
 int GameController::numOfPossibleTurns( ) const
 {
-    int turns = 0;
-
-    for ( int i = 0; i < 64; i++ )
-        if ( getPiece( i ) != nullptr ) turns += getPiece( i )->numOfPossibleMoves();
-
-    return turns;
+    return possibleTurns.at(firstplayer).size() + possibleTurns.at(secondplayer).size();
 }
 
 int GameController::numOfPossibleTurns( Player *player ) const
 {
-    int turns = 0;
+    return possibleTurns.at(player).size();
+}
 
+int GameController::getMoveDirection( int from, int to ) const
+{
+    pair<int,int> fromxy = make_pair( from % 8, from / 8 ),
+            toxy = make_pair( to % 8, to / 8 );
+
+    return toxy.first > fromxy.first ?
+           ( toxy.second > fromxy.second ? 1 : 0 ) :
+           ( toxy.second > fromxy.second ? 2 : 3 );
+}
+
+void GameController::setPieceRelative( int from, int byx, int byy, Piece * piece )
+{
+    if ( from + byx + ( byy * 8 ) > 0 && from + byx + ( byy * 8 ) < 64 )
+        this->field[ from + byx + ( byy * 8 ) ] = piece;
+    else
+        throw runtime_error("Accessing non-existent place in field");
+}
+
+int GameController::getMoveMagnitude( int from, int to ) const
+{
+    pair<int,int> fromxy = make_pair( from % 8, from / 8 ),
+            toxy = make_pair( to % 8, to / 8 );
+
+    return (int)sqrt( pow( abs( fromxy.first - toxy.first ), 2 ) + pow( abs( fromxy.second - toxy.second ) , 2 ) );
+}
+
+void GameController::conversionToKings( )
+{
+    // Top line
+    for ( int i = 0; i < 7; i++ )
+    {
+        if ( field[ i ] != nullptr )
+        if ( field[ i ]->owner == firstplayer && field[ i ]->type == field[ i ]->TYPE_MEN )
+        {
+            delete field[ i ];
+            field[ i ] = new KingPiece( firstplayer, this, i );
+        }
+    }
+
+    // Bottom line
+    for ( int i = 56; i < 63; i++ )
+    {
+        if ( field[ i ] != nullptr )
+        if ( field[ i ]->owner == secondplayer )
+        {
+            delete field[ i ];
+            field[ i ] = new KingPiece( secondplayer, this, i );
+        }
+    }
+}
+
+bool GameController::outOfFieldRelative( int from, int byx, int byy ) const
+{
+    return from + byx + ( byy * 8 ) > 63 || from + byx + ( byy * 8 ) < 0 || (from + byx) / 8 != from / 8;
+}
+
+void GameController::findPossibleTurns( Player * player )
+{
+    vector<pair<int,int>> moves, jumps;
+
+    // Iterate over field
     for ( int i = 0; i < 64; i++ )
-        if ( getPiece( i ) != nullptr && getPiece( i )->owner == player ) turns += getPiece( i )->numOfPossibleMoves();
+    {
+        // Find only pieces that belongs to specified player
+        if ( getPiece( i ) != nullptr && getPiece( i )->owner == player )
+        {
+            // Find all moves and jumps
+            pair< vector<int>, vector<int> > movesnjumps = getPiece( i )->findAllMoves();
 
-    return turns;
+            // And copy them
+            for ( int move : movesnjumps.first ) moves.push_back( make_pair( i, move ) );
+            for ( int jump : movesnjumps.second ) jumps.push_back( make_pair( i, jump ) );
+        }
+    }
+
+    // If there is any possible jump, moves can't be done
+    possibleTurns[ player ] = jumps.size() > 0 ? jumps : moves;
 }

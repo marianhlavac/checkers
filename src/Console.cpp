@@ -126,3 +126,24 @@ std::string Console::getNextCommand( std::queue<std::string> &commands )
         return command;
     } else return "";
 }
+
+
+
+std::string Console::translateCoords( int location )
+{
+    stringstream ss;
+    int col = location % 8, row = location / 8;
+    ss << (char)( 65 + col ) << (row + 1);
+    return ss.str();
+}
+
+int Console::translateCoords( std::string location )
+{
+    int col = -1, row = -1;
+
+    if ( location[0] >= 65 && location[0] <= 72 ) col = location[0] - 65;
+    if ( location[0] >= 97 && location[0] <= 104 ) col = location[0] - 97;
+    if ( location[1] >= 49 && location[1] <= 57 ) row = location[1] - 49;
+
+    return ( col == -1 || row == -1 ? -1 : row * 8 + col );
+}

@@ -19,6 +19,12 @@ void Piece::moveTo( int newLocation )
     } else throw runtime_error("Trying to move piece to a occupied position in the field");
 }
 
-Piece::Piece( Player *owner, GameController *parent, int location ) : owner( owner ), parent( parent ), location( location )
+Piece::Piece( Player *owner, GameController *parent, int location, int type ) : owner( owner ), parent( parent ), location( location ), type( type )
 {
+}
+
+int Piece::numOfPossibleMoves( )
+{
+    pair< vector<int>, vector<int> > movesnjumps = findAllMoves();
+    return movesnjumps.second.size() > 0 ? movesnjumps.second.size() : movesnjumps.first.size();
 }

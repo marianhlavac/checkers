@@ -3,4 +3,9 @@
 //
 
 #include <iostream>
+#include "GameController.h"
 
+Player::Player( GameController * parent ) : parent( parent )
+{
+
+}
