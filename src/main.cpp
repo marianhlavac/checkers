@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
 
 #include "GameController.h"
 #include "Player.h"
@@ -46,7 +47,26 @@ int main( int argc, char *argv[] )
     gameController.delay( SPLASH_SCREEN_TIME );
     gameController.renderer->flushScreen();
 
-    gameController.prepareGame();
+    // Load / create new game
+    if ( loadfilename != "" )
+    {
+        cout << "Opening save file '" << loadfilename << "' ..." << endl;
+        ifstream file;
+        file.open( loadfilename );
+
+        if ( file.fail() || ! gameController.loadGame( file ) )
+        {
+            cerr <<
+            "Error loading game from file. You don't have rights to read this file or the file is corrupted file save." <<
+            endl;
+            return 2;
+        }
+    }
+    else
+    {
+        gameController.prepareNewGame();
+    }
+
     cout << "Game ready..." << endl;
 
     // First redraw

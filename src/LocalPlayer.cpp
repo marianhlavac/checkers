@@ -34,8 +34,7 @@ pair<int, int> LocalPlayer::WaitForInput( )
     // Command for saving the game
     if ( from == "save" )
     {
-        cout << " > not possible. ";
-        return make_pair( -1, -1 );
+        return make_pair( -4, -4 );
     }
 
     // # SPECIAL COMMANDS

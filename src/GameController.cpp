@@ -8,6 +8,7 @@
 #include <sstream>
 #include <typeinfo>
 #include <algorithm>
+#include <fstream>
 
 #include "GameController.h"
 #include "UIRenderer.h"
@@ -17,6 +18,7 @@
 #include "AIPlayer.h"
 #include "NetworkPlayer.h"
 #include "KingPiece.h"
+#include "Savefile.h"
 
 int GameController::instances = 0;
 
@@ -57,13 +59,27 @@ void GameController::tick()
     pair<int, int> inputTurn = make_pair( INTMAX_MIN, INTMAX_MIN );
     do
     {
+        // If entering input failed, redraw
         if ( inputTurn.first != INTMAX_MIN ) renderer->redraw();
+
+        // Wait for input...
         inputTurn = onTurn->WaitForInput( );
+
+        // If input is ( -2, -2 ), it's signal for game quit
         if ( inputTurn == pair<int,int>( -2, -2 ) )
         {
+            cout << "Exiting game..." << endl;
             gameHasEnded = true;
             break;
         }
+
+        // If input is ( -4, -4 ), it's signal for saving game
+        if ( inputTurn == pair<int,int>( -4, -4 ) )
+        {
+            cout << "Saving game..." << endl;
+            saveGame();
+        }
+
         invalidInput = true;
     }
     while ( ! isTurnValid( inputTurn ) );
@@ -95,7 +111,7 @@ void GameController::delay( int s )
     { }
 }
 
-void GameController::prepareGame( )
+void GameController::prepareNewGame( )
 {
     cout << "Preparing the game..." << endl;
 
@@ -160,6 +176,19 @@ void GameController::prepareGame( )
 
     // Determine who's starting the game todo: this doesn't work
     onTurn = firstplayer;
+}
+
+bool GameController::loadGame( istream & loadInfo )
+{
+    cout << "Loading the game from save file..." << endl;
+
+    gameHasEnded = false;
+
+    // Create field of pieces
+    field = new Piece*[64];
+    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
+
+    return Savefile::load( loadInfo, this );
 }
 
 void GameController::gameOver( Player * winner )
@@ -319,4 +348,32 @@ void GameController::findPossibleTurns( Player * player, bool * isJumps )
     // If there is any possible jump, moves can't be done
     possibleTurns[ player ] = jumps.size() > 0 ? jumps : moves;
     if ( isJumps != nullptr ) *isJumps = jumps.size() > 0;
+}
+
+void GameController::saveGame( )
+{
+    // Create savefile
+    string save = Savefile::create( this );
+    ofstream file;
+
+    // Open file
+    time_t t; time( &t );
+    char buf[128];
+    strftime( buf, 128, "save-%Y%m%d%H%M%S.txt", gmtime( &t ) );
+    file.open( buf );
+
+    if ( ! file.fail() )
+    {
+        // Save to file
+        file << save;
+        cout << endl << " > Game saved as '" << buf << "'." << endl;
+        delay( 3 );
+    }
+    else
+    {
+        cerr << "/!\\ ERROR! The folder is not writtable! Save unsuccessful." << endl;
+        delay( 5 );
+    }
+
+    file.close();
 }

@@ -8,6 +8,7 @@
 #include "UIRenderer.h"
 #include "Piece.h"
 #include <map>
+#include <iostream>
 
 // Forward declaration to avoid circular dependency problems
 class UIRenderer;
@@ -27,7 +28,8 @@ public:
     Player * firstplayer, * secondplayer;
 
     GameController( );
-    void prepareGame( );
+    void prepareNewGame( );
+    bool loadGame( std::istream & loadInfo );
     void tick( );
     void delay( int s );
     Piece *getPiece( int index ) const;
@@ -48,6 +50,7 @@ private:
     void endOfTurn( );
     void conversionToKings( );
     void gameOver( Player * winner );
+    void saveGame( );
 
     Piece ** field;
 };
