@@ -57,7 +57,7 @@ int main( int argc, char *argv[] )
         gameController.tick();
     }
 
-
+    gameController.delay( 4 );
 
     return 0;
 

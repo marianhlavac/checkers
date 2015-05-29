@@ -39,6 +39,7 @@ public:
     int getMoveDirection( int from, int to ) const;
     int getMoveMagnitude( int from, int to ) const;
     bool outOfFieldRelative( int from, int byx, int byy ) const;
+    void findPossibleTurns( Player * player, bool * isJumps = nullptr );
 
 private:
     bool isTurnValid( std::pair< int, int > turn ) const;
@@ -47,7 +48,6 @@ private:
     void endOfTurn( );
     void conversionToKings( );
     void gameOver( Player * winner );
-    void findPossibleTurns( Player * player, bool * isJumps = nullptr );
 
     Piece ** field;
 };

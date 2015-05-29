@@ -45,7 +45,7 @@ std::pair<std::vector<int>, std::vector<int> > KingPiece::diagonalSearch( int di
 
     while ( ! parent->outOfFieldRelative( location, x, y ) )
     {
-        if ( x == y == 0 ) { x += dirx; y += diry; continue; }
+        if ( x == 0 && y == 0 ) { x += dirx; y += diry; continue; }
         Piece *piece = parent->getPieceRelative( location, x, y );
 
         if ( piece != nullptr )
@@ -62,7 +62,11 @@ std::pair<std::vector<int>, std::vector<int> > KingPiece::diagonalSearch( int di
         {
             // We can move or jump to free place
             if ( jumpingover )
+            {
                 jumps.push_back( location + x + y*8 );
+                // But jump can be only one
+                break;
+            }
             else
                 moves.push_back( location + x + y*8 );
 

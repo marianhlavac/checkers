@@ -178,17 +178,20 @@ bool GameController::isTurnValid( pair<int, int> turn ) const
 
 void GameController::discardAnyBetween( int from, int to )
 {
-    cout << "Magnitude was: " << getMoveMagnitude( from, to );
-    if ( getMoveMagnitude( from, to ) >= 2 )
+    int xdir = ( to % 8 > from % 8 ? 1 : -1 ), ydir = ( to / 8 > from / 8 ? 1 : -1 );
+
+    cout << " --- " << from % 8 << ", " << from / 8 << " -> " << to % 8 << ", " << to / 8 << endl;
+
+    // Go through diag and throw out enemy's piece
+    for ( int x = from % 8, y = from / 8; x != to % 8 && y != to / 8; x += xdir, y += ydir )
     {
-        // Get correct piece
-        int dir = getMoveDirection( from, to );
-        Piece *piece = getPieceRelative( from, dir > 1 ? -1 : 1, dir < 3 && dir > 0 ? 1 : -1 );
-
-        if ( piece == nullptr ) throw runtime_error( "Missing piece between last move!" );
-
-        delete piece;
-        setPieceRelative( from, dir > 1 ? -1 : 1, dir < 3 && dir > 0 ? 1 : -1, nullptr );
+        cout << "g: " << x << " " << y << " - " << (x + y * 8 ) << endl;
+        Piece *piece = getPiece( x + y * 8 );
+        if ( piece != nullptr && piece->owner != onTurn )
+        {
+            delete piece;
+            setPiece( x + y * 8, nullptr );
+        }
     }
 }
 
@@ -216,7 +219,7 @@ Piece *GameController::getPiece( int index ) const
 
 void GameController::setPiece( int index, Piece *piece )
 {
-    if ( index > 0 && index < 64 )
+    if ( index >= 0 && index <= 63 )
         this->field[ index ] = piece;
     else
         throw runtime_error("Accessing non-existent place in field");
@@ -290,7 +293,8 @@ void GameController::conversionToKings( )
 
 bool GameController::outOfFieldRelative( int from, int byx, int byy ) const
 {
-    return from + byx + ( byy * 8 ) > 63 || from + byx + ( byy * 8 ) < 0 || (from + byx) / 8 != from / 8;
+    return from + byx + ( byy * 8 ) > 63 || from + byx + ( byy * 8 ) < 0 ||
+            from + byx < 0 || from + byx > 63 || (from + byx) / 8 != from / 8;
 }
 
 void GameController::findPossibleTurns( Player * player, bool * isJumps )
