@@ -1,5 +1,5 @@
 //
-// Created by Mari·n on 11. 5. 2015.
+// Created by Mari√°n on 11. 5. 2015.
 //
 
 #ifndef CHECKERS_GAMECONTROLLER_H

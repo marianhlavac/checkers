@@ -1,5 +1,5 @@
 //
-// Created by Marián on 29. 5. 2015.
+// Created by MariÃ¡n on 29. 5. 2015.
 //
 
 #include <sstream>

@@ -1,5 +1,5 @@
 //
-// Created by Mari·n on 13. 5. 2015.
+// Created by Mari√°n on 13. 5. 2015.
 //
 
 #include "UIRendererUnicode.h"
