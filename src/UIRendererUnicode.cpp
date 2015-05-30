@@ -4,7 +4,8 @@
 
 #include "UIRendererUnicode.h"
 
-UIRendererUnicode::UIRendererUnicode( GameController *parent ) : UIRenderer( parent )
+UIRendererUnicode::UIRendererUnicode( GameController *parent ) :
+        UIRenderer( parent, 'i', 'z', 'B', 'W', '!', (charType) 177, (charType) 177, '.', u'\u058D', '!', '|', true)
 {
 
 }

@@ -9,6 +9,7 @@
 #include "UIRenderer.h"
 #include "ConsoleParsingErrorException.h"
 #include "UIRendererUnicode.h"
+#include "UIRendererCompatible.h"
 
 #define  SPLASH_SCREEN_TIME  1
 
@@ -38,7 +39,7 @@ int main( int argc, char *argv[] )
     if ( rendermode == 1 )
         gameController.renderer = new UIRendererUnicode( &gameController );
     else if ( rendermode == 2 )
-        gameController.renderer = new UIRenderer( &gameController ); // todo: compatible renderer!
+        gameController.renderer = new UIRendererCompatible( &gameController );
     else
         gameController.renderer = new UIRenderer( &gameController );
 

@@ -9,21 +9,33 @@
 #include "GameController.h"
 #include "Console.h"
 
-#define LEFT_MARGIN     6
+#define LEFT_MARGIN         6
+#define DEBUG_SHOW_MOVES    true
 
-UIRenderer::UIRenderer( GameController * parent ) : parent( parent )
+UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
+                        charType bking, charType nonepcs, charType outsprtr, charType insprtr,
+                        charType waiting, charType prompt, charType invalidinp,
+                        charType infoboxsprtr, bool allowColors)
+        : parent( parent ), WMEN_CHAR( wmen ), BMEN_CHAR( bmen ), WKING_CHAR( wking ), BKING_CHAR( bking ),
+          NONE_PCS_CHAR( nonepcs ), OUT_SPRTR_CHAR( outsprtr ), IN_SPRTR_CHAR( insprtr ), WAITING_CHAR( waiting ),
+          PROMPT_CHAR( prompt ), INVALID_INPUT_CHAR( invalidinp ), INFOBOX_SEP_CHAR( infoboxsprtr ),
+          allowColors( allowColors )
 {
-    cout << "Default UI Renderer initialized..." << endl;
-
     // Initialize logo lines
     logoLines = new std::string[6] {
-        "      _               _",
-        "     | |             | |",
-        "  ___| |__   ___  ___| | _____ _ __ ___",
-        " / __| '_ \\ / _ \\/ __| |/ / _ \\ '__/ __| ",
-        "| (__| | | |  __/ (__|   <  __/ |  \\__ \\ ",
-        " \\___|_| |_|\\___|\\___|_|\\_\\___|_|  |___/  v1.0 ",
+            "      _               _",
+            "     | |             | |",
+            "  ___| |__   ___  ___| | _____ _ __ ___",
+            " / __| '_ \\ / _ \\/ __| |/ / _ \\ '__/ __| ",
+            "| (__| | | |  __/ (__|   <  __/ |  \\__ \\ ",
+            " \\___|_| |_|\\___|\\___|_|\\_\\___|_|  |___/  v1.0 ",
     };
+}
+
+UIRenderer::UIRenderer( GameController * parent ) :
+        UIRenderer( parent, 'b', 'w', 'B', 'W', '!', (charType) 177, (charType) 177, '.', '>', '!', '|', true )
+{
+    cout << "Default UI Renderer initialized..." << endl;
 }
 
 void UIRenderer::redraw( ) const
@@ -41,16 +53,18 @@ void UIRenderer::redraw( ) const
     drawField();
 
     // Debug: Print all possible turns
-    cout << endl << endl << std::string( LEFT_MARGIN , ' ' ) << "--- Possible moves: " << std::string( 27, '-') << endl;
-
-    for ( pair<int,int> move : parent->possibleTurns[ parent->onTurn ] )
+    if ( DEBUG_SHOW_MOVES )
     {
-        cout << Console::translateCoords( move.first ) << " -> " << Console::translateCoords( move.second ) << ", ";
+        cout << endl << endl << std::string( LEFT_MARGIN , ' ' ) << "--- Possible moves: " << std::string( 27, '-') << endl;
+        for ( pair<int,int> move : parent->possibleTurns[ parent->onTurn ] )
+            cout << Console::translateCoords( move.first ) << " -> " << Console::translateCoords( move.second ) << ", ";
     }
 
     // Draw input prompt
     cout << endl << endl << std::string( LEFT_MARGIN , ' ' ) << "--- Your turn: " << std::string( 32, '-');
-    cout << endl << std::string( LEFT_MARGIN - 1, ' ' ) << ( parent->invalidInput ? "! > " : "  > " );
+    cout << endl << std::string( LEFT_MARGIN - 1, ' ' ) << ( parent->invalidInput ? INVALID_INPUT_CHAR : ' ' )
+            << ' ' ;
+    wcout << PROMPT_CHAR << ' ';
 }
 
 GameController *UIRenderer::getParent( ) const
@@ -127,27 +141,27 @@ void UIRenderer::drawFieldLine( int line ) const
         Piece * piece = parent->getPiece( i );
 
         if ( line % 2 == 0 ? i % 2 == 0 : i % 2 != 0 )
-            cout << std::string( 3, (char)178 );
+            wcout << OUT_SPRTR_CHAR << IN_SPRTR_CHAR << OUT_SPRTR_CHAR;
         else
             if ( piece == nullptr )
                 cout << "   ";
             else
             {
-                char pieceChar = '!';
+                charType pieceChar = NONE_PCS_CHAR;
 
                 if ( piece->owner->color == 'b' )
                     pieceChar = (piece->type == piece->TYPE_KING ? BKING_CHAR : BMEN_CHAR);
                 else if ( piece->owner->color == 'w' )
                     pieceChar = (piece->type == piece->TYPE_KING ? WKING_CHAR : WMEN_CHAR);
 
-                cout << " " << pieceChar << " ";
+                wcout << " " << pieceChar << " ";
             }
     }
 }
 
 void UIRenderer::drawInfoboxLine( int line ) const
 {
-    cout << "> ";
+    wcout << INFOBOX_SEP_CHAR << ' ';
     if ( line == 0 ) cout << "This is infobox";
     if ( line == 2 ) cout << parent->onTurn->name << " is on turn.";
 }

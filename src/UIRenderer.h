@@ -9,14 +9,22 @@
 
 #include "GameController.h"
 
+typedef wchar_t charType;
+
 // Forward declaration to avoid circular dependency problems
 class GameController;
 
 class UIRenderer
 {
 public:
-    static const char WMEN_CHAR = 'w', BMEN_CHAR = 'b', WKING_CHAR = 'W', BKING_CHAR = 'B';
+    const charType WMEN_CHAR, BMEN_CHAR, WKING_CHAR, BKING_CHAR, NONE_PCS_CHAR, OUT_SPRTR_CHAR, IN_SPRTR_CHAR,
+            WAITING_CHAR, PROMPT_CHAR, INVALID_INPUT_CHAR, INFOBOX_SEP_CHAR;
+    const bool allowColors;
 
+    UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
+                charType bking, charType nonepcs, charType outsprtr, charType insprtr,
+                charType waiting, charType prompt, charType invalidinp, charType infoboxsprtr,
+                bool allowColors );
     UIRenderer( GameController * parent );
     void redraw( ) const;
     void flushScreen( ) const;
@@ -28,7 +36,7 @@ public:
 
     GameController *getParent( ) const;
 
-private:
+protected:
     GameController * parent;
     std::string * logoLines;
 
