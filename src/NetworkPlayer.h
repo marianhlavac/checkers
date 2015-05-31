@@ -12,6 +12,10 @@ class NetworkPlayer : public Player
 public:
     NetworkPlayer( GameController * parent );
     pair<int, int> WaitForInput( );
+    void informMove( int from, int to );
+
+private:
+    void parseIncoming( string & recv, int & from, int & to, int & ticknum, int & netgameid );
 };
 
 

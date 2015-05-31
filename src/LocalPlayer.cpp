@@ -44,7 +44,7 @@ pair<int, int> LocalPlayer::WaitForInput( )
         if ( from == "sp" || from == "spk" || from == "ep" )
         {
             int pos, ply;
-            cout << " position, player > ";
+            wcout << L" pos, ply > ";
             cin >> pos >> ply;
             if ( parent->getPiece( pos ) != nullptr ) delete parent->getPiece( pos );
             if ( from == "ep" )
@@ -83,3 +83,5 @@ pair<int, int> LocalPlayer::WaitForInput( )
     else
         return make_pair( -1, -1 );
 }
+
+void LocalPlayer::informMove(int from, int to) { }

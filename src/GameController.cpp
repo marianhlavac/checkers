@@ -12,13 +12,14 @@
 
 #include "GameController.h"
 #include "UIRenderer.h"
-#include "SingletonInstantiationException.h"
+#include "exceptions.h"
 #include "MenPiece.h"
 #include "LocalPlayer.h"
 #include "AIPlayer.h"
 #include "NetworkPlayer.h"
 #include "KingPiece.h"
 #include "Savefile.h"
+#include "NetworkConnection.h"
 
 int GameController::instances = 0;
 
@@ -68,7 +69,7 @@ void GameController::tick()
         // If input is ( -2, -2 ), it's signal for game quit
         if ( inputTurn == pair<int,int>( -2, -2 ) )
         {
-            cout << "Exiting game..." << endl;
+            wcout << L"Exiting game..." << endl;
             gameHasEnded = true;
             break;
         }
@@ -76,8 +77,17 @@ void GameController::tick()
         // If input is ( -4, -4 ), it's signal for saving game
         if ( inputTurn == pair<int,int>( -4, -4 ) )
         {
-            cout << "Saving game..." << endl;
+            wcout << L"Saving game..." << endl;
             saveGame();
+        }
+
+        // If input is ( -6, -6 ), it's signal for failed input receive
+        if ( inputTurn == pair<int,int>( -6, -6 ) )
+        {
+            cerr << "Receiving other player's move failed. The connection may be desynchronized or there is general failure with connection.\n"
+                            "Aborting the game." << endl;
+            gameHasEnded = true;
+            break;
         }
 
         invalidInput = true;
@@ -88,6 +98,9 @@ void GameController::tick()
 
     if ( gameHasEnded ) return;
 
+    // Inform the other player about this move (only used in network conn)
+    ( firstplayer == onTurn ? secondplayer : firstplayer )->informMove( inputTurn.first, inputTurn.second );
+
     // Manipulate pieces and other objects on field
     getPiece( inputTurn.first )->moveTo( inputTurn.second );
     discardAnyBetween( inputTurn.first, inputTurn.second );
@@ -97,7 +110,7 @@ void GameController::tick()
     if ( ! ( jumpAvailable && ( jumpSequence = isJumpSequence( ) ) ) ) endOfTurn( );
 
     // Make one step forward ( +1 tick )
-    cout << "End of tick " << ticks << "...";
+    wcout << L"End of tick " << ticks << "...";
     ticks++;
 
     // Redraw
@@ -113,7 +126,7 @@ void GameController::delay( int s )
 
 void GameController::prepareNewGame( )
 {
-    cout << "Preparing the game..." << endl;
+    wcout << L"Preparing a local game..." << endl;
 
     gameHasEnded = false;
 
@@ -128,24 +141,10 @@ void GameController::prepareNewGame( )
         firstplayer = new LocalPlayer( this );
         secondplayer = new AIPlayer( this );
     }
-    else if ( gameMode == MODE_VSNET )
-    {
-        firstplayer = new LocalPlayer( this );
-        secondplayer = new NetworkPlayer( this );
-    }
+    else throw runtime_error( "Wrong gamemode" );
 
-    // Assign colors to players
-    if ( gameMode == MODE_VSNET )
-    {
-        // todo: make sure the colors are correctly assigned
-        firstplayer->color = 'w';
-        secondplayer->color = 'b';
-    }
-    else
-    {
-        firstplayer->color = 'w';
-        secondplayer->color = 'b';
-    }
+    firstplayer->color = 'w';
+    secondplayer->color = 'b';
 
     // Set players names
     firstplayer->name = "Player 1";
@@ -155,32 +154,116 @@ void GameController::prepareNewGame( )
     field = new Piece*[64];
     for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
 
-    // Fill the field with pieces for 1st player
-    for ( int i = 40; i < 64; i += 2 )
-    {
-        if ( i == 48 ) i++;
-        if ( i == 57 ) i--;
-        field[i] = new MenPiece( firstplayer, this, i );
-    }
+    // Fill the field
+    fillFieldWithMens( false );
 
-    // Fill the field with pieces for 2nd player
-    for ( int i = 1; i < 24; i += 2 )
-    {
-        if ( i == 16 ) i++;
-        if ( i == 9 ) i--;
-        field[i] = new MenPiece( secondplayer, this, i );
-    }
-
-    // Set mode for local todo: temporary
-    gameMode = MODE_VSLOC;
-
-    // Determine who's starting the game todo: this doesn't work
+    // First player's turn
     onTurn = firstplayer;
+}
+
+void GameController::prepareNewNetworkGame( std::string & address, std::string & port )
+{
+    wcout << L"Preparing a local game..." << endl;
+
+    bool isServer = address == "hostinggame";
+
+    // Create connection
+    NetworkConnection *net = new NetworkConnection(
+            isServer ? NetworkConnection::CONNECTION_SERVER : NetworkConnection::CONNECTION_CLIENT,
+            address.c_str(),
+            port.c_str()
+    );
+
+    // Make connection between players
+    if ( ! net->makeConnection() ) throw CreatingGameFailedException( "Could not create a connection between" );
+    wcout << L"Connection established" << endl;
+
+    // 2x Handshake
+    if ( isServer )
+    {
+        delay( 2 );
+        net->sendHandShake();
+        net->waitForHandShake();
+        net->sendHandShake();
+        net->waitForHandShake();
+    }
+    else
+    {
+        net->waitForHandShake();
+        net->sendHandShake();
+        net->waitForHandShake();
+        net->sendHandShake();
+    }
+    wcout << L"Handshake successful!\nExchanging initial information..." << endl;
+
+    // Exchange init information server <--> client
+    if ( isServer )
+    {
+        // Short wait for client
+        delay( 1 );
+
+        // Create first player
+        firstplayer = new LocalPlayer( this );
+        firstplayer->color = 'w';
+        firstplayer->name = "Player 1";
+
+        // Create netGame ID
+        netGameId = rand() % 65535;
+
+        // Send info about me
+        net->sendMessage( "b;" + firstplayer->name + ";7;" + to_string( netGameId ) );
+
+        string received, nick; char color; int hisnetGameId;
+
+        // Wait for data from client about him
+        net->receive( received );
+
+        // Parse received data
+        parseNetInitData( received, color, nick, hisnetGameId );
+
+        if ( netGameId != hisnetGameId )
+            throw CreatingGameFailedException( "Invalid netGameId received" );
+
+        // Create second player
+        secondplayer = new NetworkPlayer( this );
+        secondplayer->color = color;
+        secondplayer->name = nick;
+
+
+    }
+    else
+    {
+        string received, nick;
+        char color;
+
+        // Wait for data from server
+        net->receive( received );
+
+        // Parse received data
+        parseNetInitData( received, color, nick, netGameId );
+
+        // Create first player
+        firstplayer = new NetworkPlayer( this );
+        firstplayer->color = color;
+        firstplayer->name = nick;
+
+        // Create second player
+        secondplayer = new LocalPlayer( this );
+        secondplayer->color = color == 'w' ? 'b' : 'w';
+        secondplayer->name = "Player 2";
+
+        // Send info about me
+        net->sendMessage( "b;" + secondplayer->name + ";7;" + to_string( netGameId ) );
+    }
+
+    // Game is ready to play... (whew!)
+    this->net = net;
+
 }
 
 bool GameController::loadGame( istream & loadInfo )
 {
-    cout << "Loading the game from save file..." << endl;
+    wcout << L"Loading the game from save file..." << endl;
 
     gameHasEnded = false;
 
@@ -209,12 +292,9 @@ void GameController::discardAnyBetween( int from, int to )
 {
     int xdir = ( to % 8 > from % 8 ? 1 : -1 ), ydir = ( to / 8 > from / 8 ? 1 : -1 );
 
-    cout << " --- " << from % 8 << ", " << from / 8 << " -> " << to % 8 << ", " << to / 8 << endl;
-
     // Go through diag and throw out enemy's piece
     for ( int x = from % 8, y = from / 8; x != to % 8 && y != to / 8; x += xdir, y += ydir )
     {
-        cout << "g: " << x << " " << y << " - " << (x + y * 8 ) << endl;
         Piece *piece = getPiece( x + y * 8 );
         if ( piece != nullptr && piece->owner != onTurn )
         {
@@ -366,7 +446,7 @@ void GameController::saveGame( )
     {
         // Save to file
         file << save;
-        cout << endl << " > Game saved as '" << buf << "'." << endl;
+        wcout << endl << L" > Game saved as '" << buf << L"'." << endl;
         delay( 3 );
     }
     else
@@ -376,4 +456,39 @@ void GameController::saveGame( )
     }
 
     file.close();
+}
+
+void GameController::fillFieldWithMens( bool reverted )
+{
+    // Fill the field with pieces for 1st player
+    for ( int i = 40; i < 64; i += 2 )
+    {
+        if ( i == 48 ) i++;
+        if ( i == 57 ) i--;
+        field[ reverted ? 63-i : i ] = new MenPiece( firstplayer, this, reverted ? 63-i : i );
+    }
+
+    // Fill the field with pieces for 2nd player
+    for ( int i = 1; i < 24; i += 2 )
+    {
+        if ( i == 16 ) i++;
+        if ( i == 9 ) i--;
+        field[ reverted ? 63-i : i ] = new MenPiece( secondplayer, this, reverted ? 63-i : i );
+    }
+}
+
+void GameController::parseNetInitData( string & received, char & color, string & nick, int & netgameid )
+{
+    stringstream ss;
+    ss.str( received );
+
+    string colorstr, ngidstr;
+
+    getline( ss, colorstr, ';' );
+    getline( ss, nick, ';' );
+    getline( ss, ngidstr, ';' ); // threw reserved 7 away
+    getline( ss, ngidstr, ';' );
+
+    color = colorstr[0];
+    netgameid = stoi( ngidstr );
 }

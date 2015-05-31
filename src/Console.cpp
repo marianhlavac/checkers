@@ -8,9 +8,10 @@
 
 #include "Console.h"
 #include "GameController.h"
-#include "ConsoleParsingErrorException.h"
+#include "exceptions.h"
 
-void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile, std::string &networkaddress )
+void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile,
+                          std::string &networkaddress, std::string & networkport )
 {
     bool gamemodeSet = false, rendermodeSet = false, fileLoaded = false;
     std::string ip = "0.0.0.0", port = "0";
@@ -23,8 +24,6 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
     while ( ! parsedCommands.empty() )
     {
         std::string command = getNextCommand( parsedCommands );
-
-        std::cout << command << std::endl;
 
         // --versus-local
         if ( command == "--versus-local" )
@@ -86,6 +85,14 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
                 rendermodeSet = true;
             }
         }
+        else if ( command == "--host" )
+        {
+            if ( gamemodeSet && gameMode == GameController::MODE_VSNET )
+            {
+                ip = "hostinggame";
+            }
+            else throw ConsoleParsingErrorException( "Game mode must be set to versus network before setting network address." );
+        }
         else if ( command == "--ip" )
         {
             if ( gamemodeSet && gameMode == GameController::MODE_VSNET )
@@ -93,7 +100,6 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
                 ip = getNextCommand( parsedCommands );
                 if ( ip == "" )
                     throw ConsoleParsingErrorException( "Network address must be specified for this gamemode" );
-                // todo: check ip address validity
             }
             else throw ConsoleParsingErrorException( "Game mode must be set to versus network before setting network address." );
         }
@@ -103,7 +109,6 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
             {
                 port = getNextCommand( parsedCommands );
                 if ( port == "" ) throw ConsoleParsingErrorException( "Network port must be specified for this gamemode" );
-                // todo: check port validity
             }
             else throw ConsoleParsingErrorException( "Game mode must be set to versus network before setting network port." );
         }
@@ -114,7 +119,11 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
 
     }
 
-    networkaddress = ip + ":" + port;
+    if ( gamemodeSet && gameMode == GameController::MODE_VSNET && ( ip == "0.0.0.0" || ip == "" || port == "0" ) )
+        throw ConsoleParsingErrorException( "You must specify network address and port for network play!" );
+
+    networkaddress = ip;
+    networkport = port;
 }
 
 std::string Console::getNextCommand( std::queue<std::string> &commands )
@@ -146,4 +155,12 @@ int Console::translateCoords( std::string location )
     if ( location[1] >= 49 && location[1] <= 57 ) row = location[1] - 49;
 
     return ( col == -1 || row == -1 ? -1 : row * 8 + col );
+}
+
+std::wstring Console::translateCoordsW(int location) {
+    stringstream ss;
+    int col = location % 8, row = location / 8;
+    ss << (char)( 65 + col ) << (row + 1);
+    string result = ss.str();
+    return wstring( result.begin(), result.end() );
 }

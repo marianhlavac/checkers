@@ -23,6 +23,7 @@ public:
 
     Player( GameController *parent );
     virtual pair< int, int > WaitForInput() = 0;
+    virtual void informMove( int from, int to ) = 0;
 
 protected:
     GameController *parent;

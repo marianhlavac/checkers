@@ -38,7 +38,7 @@ public:
 
 protected:
     GameController * parent;
-    std::string * logoLines;
+    std::wstring * logoLines;
 
     void drawLogoLine( int line ) const;
     virtual void drawFieldLine( int line ) const;

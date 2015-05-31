@@ -7,6 +7,7 @@
 
 #include "UIRenderer.h"
 #include "Piece.h"
+#include "NetworkConnection.h"
 #include <map>
 #include <iostream>
 
@@ -26,10 +27,13 @@ public:
     UIRenderer * renderer;
     std::map<Player*, std::vector<std::pair<int,int>>> possibleTurns;
     Player * firstplayer, * secondplayer;
+    NetworkConnection * net = nullptr;
+    int netGameId = -1;
 
     GameController( );
     void prepareNewGame( );
     bool loadGame( std::istream & loadInfo );
+    void prepareNewNetworkGame( std::string & address, std::string & port );
     void tick( );
     void delay( int s );
     Piece *getPiece( int index ) const;
@@ -51,6 +55,8 @@ private:
     void conversionToKings( );
     void gameOver( Player * winner );
     void saveGame( );
+    void fillFieldWithMens( bool reverted );
+    void parseNetInitData( std::string & received, char & color, std::string & nick, int & netgameid );
 
     Piece ** field;
 };

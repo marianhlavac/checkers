@@ -17,12 +17,14 @@ public:
     /**
      * Processes the command line arguments
      */
-    static void parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile, std::string &networkaddress );
+    static void parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile,
+                            std::string &networkaddress, std::string & networkport );
 
     static std::string getNextCommand( std::queue<std::string> &commands );
 
     static std::string translateCoords( int location );
     static int translateCoords( std::string location );
+    static std::wstring translateCoordsW( int location );
 };
 
 

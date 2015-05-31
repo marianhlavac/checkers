@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "Console.h"
 #include "UIRenderer.h"
-#include "ConsoleParsingErrorException.h"
+#include "exceptions.h"
 #include "UIRendererUnicode.h"
 #include "UIRendererCompatible.h"
 
@@ -18,17 +18,18 @@ using namespace std;
 int main( int argc, char *argv[] )
 {
     int gamemode = GameController::MODE_VSLOC, rendermode = 0;
-    std::string loadfilename = "", networkaddress = "";
+    std::string loadfilename = "", networkaddress, networkport;
+
     GameController gameController;
 
     // Parse command line arguments
     try
     {
-        Console::parseCmdln( argc, argv, gamemode, rendermode, loadfilename, networkaddress );
+        Console::parseCmdln( argc, argv, gamemode, rendermode, loadfilename, networkaddress, networkport );
     }
     catch ( ConsoleParsingErrorException ex )
     {
-        cerr << "Can't run." << endl << "Error parsing arguments: " << ex.what();
+        cerr << "Can't run." << endl << "Error parsing arguments: " << ex.what() << endl;
         return 1;
     }
 
@@ -36,6 +37,7 @@ int main( int argc, char *argv[] )
     gameController.gameMode = gamemode;
 
     // Set active renderer
+    if ( rendermode != 2 ) setlocale( LC_ALL, "" );
     if ( rendermode == 1 )
         gameController.renderer = new UIRendererUnicode( &gameController );
     else if ( rendermode == 2 )
@@ -43,15 +45,29 @@ int main( int argc, char *argv[] )
     else
         gameController.renderer = new UIRenderer( &gameController );
 
+
+
     // Show splash screen
     gameController.renderer->showSplashScreen();
     gameController.delay( SPLASH_SCREEN_TIME );
     gameController.renderer->flushScreen();
 
-    // Load / create new game
-    if ( loadfilename != "" )
+    // Create new network game
+    if ( gamemode == GameController::MODE_VSNET )
     {
-        cout << "Opening save file '" << loadfilename << "' ..." << endl;
+        try
+        {
+            gameController.prepareNewNetworkGame(networkaddress, networkport);
+        }
+        catch ( CreatingGameFailedException ex )
+        {
+            cerr << "Ayy";
+        }
+    }
+    // Load local game
+    else if ( loadfilename != "" )
+    {
+        wcout << L"Opening save file '" << wstring( loadfilename.begin(), loadfilename.end() ) << L"' ..." << endl;
         ifstream file;
         file.open( loadfilename );
 
@@ -63,12 +79,13 @@ int main( int argc, char *argv[] )
             return 2;
         }
     }
+    // Create new localgame
     else
     {
         gameController.prepareNewGame();
     }
 
-    cout << "Game ready..." << endl;
+    wcout << L"Game ready..." << endl;
 
     // First redraw
     gameController.renderer->redraw();

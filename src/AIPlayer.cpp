@@ -25,3 +25,5 @@ pair<int, int> AIPlayer::WaitForInput( )
     int idx = rand() % (parent->possibleTurns.size() - 1);
     return parent->possibleTurns.at( this ).at( idx );
 }
+
+void AIPlayer::informMove(int from, int to) { }

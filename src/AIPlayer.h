@@ -12,6 +12,7 @@ class AIPlayer : public Player
 public:
     AIPlayer( GameController * parent );
     pair<int, int> WaitForInput( );
+    void informMove( int from, int to );
 };
 
 
