@@ -11,7 +11,7 @@ class MenPiece : public Piece
 {
 public:
     MenPiece( Player *owner, GameController *parent, int location );
-    std::pair< std::vector<int>, std::vector<int> > findAllMoves();
+    std::pair<std::vector<int>, std::vector<int>> findAllMoves();
 };
 
 

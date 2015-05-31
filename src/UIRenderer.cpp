@@ -9,8 +9,10 @@
 #include "GameController.h"
 #include "Console.h"
 
+using namespace std;
+
 #define LEFT_MARGIN         6
-#define DEBUG_SHOW_MOVES    false
+#define DEBUG_SHOW_MOVES    true
 
 UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
                         charType bking, charType nonepcs, charType outsprtr, charType insprtr,
@@ -22,7 +24,7 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
           allowColors( allowColors )
 {
     // Initialize logo lines
-    logoLines = new std::wstring[6] {
+    logoLines = new wstring[6] {
             L"      _               _",
             L"     | |             | |",
             L"  ___| |__   ___  ___| | _____ _ __ ___",
@@ -33,7 +35,7 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
 }
 
 UIRenderer::UIRenderer( GameController * parent ) :
-        UIRenderer( parent, 'b', 'w', 'B', 'W', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', true )
+        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', true )
 {
     wcout << L"Default UI Renderer initialized..." << endl;
 }
@@ -55,14 +57,14 @@ void UIRenderer::redraw( ) const
     // Debug: Print all possible turns
     if ( DEBUG_SHOW_MOVES )
     {
-        wcout << endl << endl << std::wstring( LEFT_MARGIN , ' ' ) << L"--- Possible moves: " << std::wstring( 27, '-') << endl;
+        wcout << endl << endl << wstring( LEFT_MARGIN , ' ' ) << L"--- Possible moves: " << wstring( 27, '-') << endl;
         for ( pair<int,int> move : parent->possibleTurns[ parent->onTurn ] )
             wcout << Console::translateCoordsW( move.first ) << L" -> " << Console::translateCoordsW( move.second ) << L", ";
     }
 
     // Draw input prompt
-    wcout << endl << endl << std::wstring( LEFT_MARGIN , ' ' ) << L"--- Your turn: " << std::wstring( 32, '-')
-        << endl << std::wstring( LEFT_MARGIN - 1, ' ' ) << ( parent->invalidInput ? INVALID_INPUT_CHAR : L' ' )
+    wcout << endl << endl << wstring( LEFT_MARGIN , ' ' ) << L"--- Your turn: " << wstring( 32, '-')
+        << endl << wstring( LEFT_MARGIN - 1, ' ' ) << ( parent->invalidInput ? INVALID_INPUT_CHAR : L' ' )
         << L' ' << PROMPT_CHAR << L' ';
 }
 
@@ -75,11 +77,11 @@ void UIRenderer::drawHeader( ) const
 {
     for ( int i = 0; i < 6; i++ )
     {
-        wcout << std::wstring( LEFT_MARGIN, ' ' );
+        wcout << wstring( LEFT_MARGIN, ' ' );
         drawLogoLine( i );
 
-        if ( i == 1 ) wcout << std::wstring( 32, ' ' ) << L"Tick " << parent->ticks;
-        if ( i == 3 ) wcout << std::wstring( 12, ' ' ) << (parent->gameMode == parent->MODE_VSLOC ? L"Versus local" : L"Versus AI");
+        if ( i == 1 ) wcout << wstring( 32, ' ' ) << L"Tick " << parent->ticks;
+        if ( i == 3 ) wcout << wstring( 12, ' ' ) << (parent->gameMode == parent->MODE_VSLOC ? L"Versus local" : L"Versus AI");
 
         wcout << endl;
     }
@@ -109,14 +111,14 @@ void UIRenderer::showSplashScreen( ) const
         while ( ! splashfile.eof() )
         {
             getline( splashfile, line );
-            wcout << endl << std::wstring(line.begin(), line.end());
+            wcout << endl << wstring(line.begin(), line.end());
         }
 }
 
 void UIRenderer::drawField( ) const
 {
     // Draw field col labels
-    wcout << std::wstring( LEFT_MARGIN + 2, ' '  );
+    wcout << wstring( LEFT_MARGIN + 2, ' '  );
     for ( int i = 0; i < 8; i++ )
     {
         wcout << " " << (wchar_t)( 65 + i ) << " ";
@@ -125,9 +127,9 @@ void UIRenderer::drawField( ) const
     // Draw field lines + infobox lines prepended with numbers
     for ( int i = 0; i < 8; i++ )
     {
-        wcout << std::wstring( LEFT_MARGIN, ' '  ) << i+1 << L" ";
+        wcout << wstring( LEFT_MARGIN, ' '  ) << i+1 << L" ";
         drawFieldLine( i );
-        wcout << std::wstring( 5, ' ' );
+        wcout << wstring( 5, ' ' );
         drawInfoboxLine( i );
         wcout << endl;
     }
@@ -162,7 +164,7 @@ void UIRenderer::drawInfoboxLine( int line ) const
 {
     wcout << INFOBOX_SEP_CHAR << ' ';
     if ( line == 0 ) wcout << L"This is infobox";
-    if ( line == 2 ) wcout << std::wstring(parent->onTurn->name.begin(), parent->onTurn->name.end() ) << L" is on turn.";
+    if ( line == 2 ) wcout << wstring(parent->onTurn->name.begin(), parent->onTurn->name.end() ) << L" is on turn.";
 }
 
 void UIRenderer::drawGameoverScreen( ) const
@@ -184,7 +186,7 @@ void UIRenderer::drawGameoverScreen( ) const
     }
     else
     {
-        wcout << std::wstring( parent->winner->name.begin(), parent->winner->name.end() ) << L" WINS!" << endl;
+        wcout << wstring( parent->winner->name.begin(), parent->winner->name.end() ) << L" WINS!" << endl;
     }
 
 }

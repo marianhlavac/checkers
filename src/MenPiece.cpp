@@ -4,16 +4,18 @@
 
 #include "MenPiece.h"
 
+using namespace std;
+
 MenPiece::MenPiece( Player *owner, GameController *parent, int location ) : Piece( owner, parent, location, TYPE_MEN )
 {
 
 }
 
-std::pair< std::vector<int>, std::vector<int> > MenPiece::findAllMoves( )
+pair< vector<int>, vector<int> > MenPiece::findAllMoves( )
 {
   char color = owner->color;
   vector<int> moves, jumps;
-  int ydir = color == 'w' ? -1 : 1;
+  int ydir = parent->boardRotated ? (color == 'w' ? 1 : -1 ) : (color == 'w' ? -1 : 1);
 
   // Move left
   if ( ! parent->outOfFieldRelative( location, -1, ydir ) &&

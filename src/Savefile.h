@@ -11,10 +11,10 @@
 class Savefile
 {
 public:
-    static string create( GameController * gameController );
-    static bool load( istream & savedInfo, GameController * gameController );
+    static std::string create( GameController * gameController );
+    static bool load( std::istream & savedInfo, GameController * gameController );
 private:
-    static void parseParams( string paramString, vector<string> & params );
+    static void parseParams( std::string paramString, std::vector<std::string> & params );
 };
 
 

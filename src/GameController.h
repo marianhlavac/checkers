@@ -21,12 +21,18 @@ class GameController
 public:
     static const int MODE_NOTSET = -1, MODE_VSLOC = 0, MODE_VSAI = 1, MODE_VSNET = 2;
     static int instances;
-    int gameMode = MODE_NOTSET, ticks = 0;
-    bool gameHasEnded, jumpSequence = false, invalidInput = false;
-    Player * onTurn = nullptr, * winner = nullptr;
+    int gameMode = MODE_NOTSET;
+    int ticks = 0;
+    bool gameHasEnded;
+    bool jumpSequence = false;
+    bool invalidInput = false;
+    bool boardRotated = false;
+    Player * onTurn = nullptr;
+    Player * winner = nullptr;
     UIRenderer * renderer;
     std::map<Player*, std::vector<std::pair<int,int>>> possibleTurns;
-    Player * firstplayer, * secondplayer;
+    Player * firstplayer;
+    Player * secondplayer;
     NetworkConnection * net = nullptr;
     int netGameId = -1;
 
@@ -55,7 +61,7 @@ private:
     void conversionToKings( );
     void gameOver( Player * winner );
     void saveGame( );
-    void fillFieldWithMens( bool reverted );
+    void fillFieldWithMens( );
     void parseNetInitData( std::string & received, char & color, std::string & nick, int & netgameid );
 
     Piece ** field;

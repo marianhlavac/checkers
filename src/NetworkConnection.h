@@ -13,13 +13,11 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <chrono>
 
 class NetworkConnection
 {
 public:
     static const int CONNECTION_NONE = 0, CONNECTION_CLIENT = 1, CONNECTION_SERVER = 2;
-    bool isConnected = false;
 
     int prepareServerSocket ( const char * listenAddr );
     int prepareClientSocket ( const char * listenAddr );
@@ -32,7 +30,6 @@ public:
     bool sendMessage( std::string message );
     void sendHandShake();
     void waitForHandShake();
-    double getHandShakeLatency();
 
 private:
     int connectionType = CONNECTION_NONE;

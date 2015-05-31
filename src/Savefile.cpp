@@ -12,6 +12,8 @@
 #include <ctime>
 #include <stdlib.h>
 
+using namespace std;
+
 #define SAVEGAMEFILE_VERSION    1
 #define SPR                     ';'
 

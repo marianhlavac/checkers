@@ -5,6 +5,8 @@
 #include <iostream>
 #include "GameController.h"
 
+using namespace std;
+
 Player::Player( GameController * parent ) : parent( parent )
 {
 

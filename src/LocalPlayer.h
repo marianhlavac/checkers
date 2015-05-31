@@ -11,7 +11,7 @@ class LocalPlayer : public Player
 {
 public:
     LocalPlayer( GameController * parent );
-    pair<int, int> WaitForInput( );
+    std::pair<int, int> WaitForInput( );
     void informMove( int from, int to );
 };
 

@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include "AIPlayer.h"
 
+using namespace std;
+
 AIPlayer::AIPlayer( GameController *parent ) : Player( parent )
 {
 

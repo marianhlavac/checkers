@@ -4,6 +4,8 @@
 
 #include "UIRendererCompatible.h"
 
+using namespace std;
+
 UIRendererCompatible::UIRendererCompatible( GameController *parent ) :
         UIRenderer( parent, 'w', 'b', 'W', 'B', '!', '#', '#', '.', '>', '!', '|', false )
 {

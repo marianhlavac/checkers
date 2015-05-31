@@ -4,6 +4,8 @@
 
 #include <chrono>
 
+using namespace std;
+
 
 NetworkConnection::NetworkConnection( int connectionType, char * address, char * port ) :
         connectionType( connectionType ), address( address ), port( port )
@@ -25,18 +27,18 @@ bool NetworkConnection::makeConnection()
 
         if ( listensock == -1 )
         {
-            std::cerr << "Can't create connection!" << errno;
+            cerr << "Can't create connection. Error #" << errno << endl;
             return false;
         }
 
         struct sockaddr addr;
         socklen_t addrLen = sizeof( addrLen );
 
-        std::cout << "Waiting for client connection..." << std::endl;
+        cout << "Waiting for client connection..." << endl;
 
         if ( ( socketnum = accept(listensock, &addr, &addrLen) ) == -1 )
         {
-            std::cerr << "Accepting client's connection failed!" << errno;
+            cerr << "Accepting client's connection failed!" << errno;
             return false;
         }
 
@@ -46,7 +48,7 @@ bool NetworkConnection::makeConnection()
         socketnum = prepareClientSocket(address);
 
         if ( socketnum == -1 ) {
-            std::cerr << "Can't create connection. " << errno;
+            cerr << "Can't create connection. Error #" << errno << endl;
             return false;
         }
 
@@ -115,7 +117,7 @@ int NetworkConnection::prepareClientSocket( const char *listenAddr )
     return sock;
 }
 
-bool NetworkConnection::receive( std::string & received )
+bool NetworkConnection::receive( string & received )
 {
     char buffer[256];
 
@@ -124,24 +126,24 @@ bool NetworkConnection::receive( std::string & received )
     if ( len <= 0 ) return false;
 
     buffer[ len ] = '\0';
-    received = std::string( buffer );
+    received = string( buffer );
 
     return true;
 }
 
-bool NetworkConnection::sendMessage( std::string message )
+bool NetworkConnection::sendMessage( string message )
 {
     return send( socketnum, message.c_str(), strlen( message.c_str() ), 0 ) != 1;
 }
 
 void NetworkConnection::sendHandShake()
 {
-    if ( ! sendMessage( "CHECKERS_HANDSHAKE" ) ) std::cerr << errno << std::endl;
+    if ( ! sendMessage( "CHECKERS_HANDSHAKE" ) ) cerr << errno << endl;
 }
 
 void NetworkConnection::waitForHandShake()
 {
-    std::string received;
+    string received;
 
     while ( received != "CHECKERS_HANDSHAKE" )
     {

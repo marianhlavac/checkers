@@ -18,11 +18,11 @@ using namespace std;
 class Player
 {
 public:
-    string name;
+    std::string name;
     char color = 'w';
 
     Player( GameController *parent );
-    virtual pair< int, int > WaitForInput() = 0;
+    virtual std::pair< int, int > WaitForInput() = 0;
     virtual void informMove( int from, int to ) = 0;
 
 protected:

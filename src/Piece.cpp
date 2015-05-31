@@ -7,6 +7,8 @@
 #include "Piece.h"
 #include "GameController.h"
 
+using namespace std;
+
 void Piece::moveTo( int newLocation )
 {
     if ( location == newLocation ) throw runtime_error("Trying to move piece to the very same position in the field");

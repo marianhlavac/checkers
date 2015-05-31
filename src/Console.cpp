@@ -10,20 +10,22 @@
 #include "GameController.h"
 #include "exceptions.h"
 
-void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile,
-                          std::string &networkaddress, std::string & networkport )
+using namespace std;
+
+void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, string &loadfile,
+                          string &networkaddress, string & networkport )
 {
     bool gamemodeSet = false, rendermodeSet = false, fileLoaded = false;
-    std::string ip = "0.0.0.0", port = "0";
+    string ip = "0.0.0.0", port = "0";
 
     // Move commands in queue, omitting the first argument
-    std::queue<std::string> parsedCommands;
+    queue<string> parsedCommands;
     for ( int i = 1; i < argc; i++ )
-        parsedCommands.push( std::string( argv[i] ) );
+        parsedCommands.push( string( argv[i] ) );
 
     while ( ! parsedCommands.empty() )
     {
-        std::string command = getNextCommand( parsedCommands );
+        string command = getNextCommand( parsedCommands );
 
         // --versus-local
         if ( command == "--versus-local" )
@@ -126,11 +128,11 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
     networkport = port;
 }
 
-std::string Console::getNextCommand( std::queue<std::string> &commands )
+string Console::getNextCommand( queue<string> &commands )
 {
     if ( !commands.empty() )
     {
-        std::string command = commands.front();
+        string command = commands.front();
         commands.pop();
         return command;
     } else return "";
@@ -138,7 +140,7 @@ std::string Console::getNextCommand( std::queue<std::string> &commands )
 
 
 
-std::string Console::translateCoords( int location )
+string Console::translateCoords( int location )
 {
     stringstream ss;
     int col = location % 8, row = location / 8;
@@ -146,7 +148,7 @@ std::string Console::translateCoords( int location )
     return ss.str();
 }
 
-int Console::translateCoords( std::string location )
+int Console::translateCoords( string location )
 {
     int col = -1, row = -1;
 
@@ -157,7 +159,7 @@ int Console::translateCoords( std::string location )
     return ( col == -1 || row == -1 ? -1 : row * 8 + col );
 }
 
-std::wstring Console::translateCoordsW(int location) {
+wstring Console::translateCoordsW(int location) {
     stringstream ss;
     int col = location % 8, row = location / 8;
     ss << (char)( 65 + col ) << (row + 1);

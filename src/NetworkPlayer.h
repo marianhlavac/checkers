@@ -15,7 +15,7 @@ public:
     void informMove( int from, int to );
 
 private:
-    void parseIncoming( string & recv, int & from, int & to, int & ticknum, int & netgameid );
+    void parseIncoming( std::string & recv, int & from, int & to, int & ticknum, int & netgameid );
 };
 
 

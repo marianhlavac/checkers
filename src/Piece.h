@@ -24,7 +24,7 @@ public:
     Piece( Player *owner, GameController *parent, int location, int type );
     void moveTo( int newLocation );
 
-    virtual std::pair< std::vector<int>, std::vector<int> > findAllMoves() = 0;
+    virtual std::pair<std::vector<int>, std::vector<int>> findAllMoves() = 0;
     int numOfPossibleMoves();
 
 protected:

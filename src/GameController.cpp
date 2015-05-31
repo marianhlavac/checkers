@@ -21,6 +21,8 @@
 #include "Savefile.h"
 #include "NetworkConnection.h"
 
+using namespace std;
+
 int GameController::instances = 0;
 
 GameController::GameController()
@@ -119,8 +121,8 @@ void GameController::tick()
 
 void GameController::delay( int s )
 {
-    time_t start = std::time( nullptr );
-    while ( std::time( nullptr ) - s < start )
+    time_t start = time( nullptr );
+    while ( time( nullptr ) - s < start )
     { }
 }
 
@@ -155,17 +157,21 @@ void GameController::prepareNewGame( )
     for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
 
     // Fill the field
-    fillFieldWithMens( false );
+    fillFieldWithMens( );
 
     // First player's turn
     onTurn = firstplayer;
 }
 
-void GameController::prepareNewNetworkGame( std::string & address, std::string & port )
+void GameController::prepareNewNetworkGame( string & address, string & port )
 {
-    wcout << L"Preparing a local game..." << endl;
+    wcout << L"Preparing a network game..." << endl;
 
     bool isServer = address == "hostinggame";
+    if ( isServer ) address = "127.0.0.1";
+
+    gameHasEnded = false;
+    boardRotated = !isServer;
 
     // Create connection
     NetworkConnection *net = new NetworkConnection(
@@ -211,7 +217,7 @@ void GameController::prepareNewNetworkGame( std::string & address, std::string &
         netGameId = rand() % 65535;
 
         // Send info about me
-        net->sendMessage( "b;" + firstplayer->name + ";7;" + to_string( netGameId ) );
+        net->sendMessage( "w;" + firstplayer->name + ";7;" + to_string( netGameId ) );
 
         string received, nick; char color; int hisnetGameId;
 
@@ -253,11 +259,19 @@ void GameController::prepareNewNetworkGame( std::string & address, std::string &
         secondplayer->name = "Player 2";
 
         // Send info about me
-        net->sendMessage( "b;" + secondplayer->name + ";7;" + to_string( netGameId ) );
+        net->sendMessage( string( 1, secondplayer->color ) + ";" + secondplayer->name + ";7;" + to_string( netGameId ) );
     }
+
+    // Create field of pieces
+    field = new Piece*[64];
+    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
+
+    // Fill field
+    fillFieldWithMens();
 
     // Game is ready to play... (whew!)
     this->net = net;
+    onTurn = firstplayer;
 
 }
 
@@ -458,14 +472,14 @@ void GameController::saveGame( )
     file.close();
 }
 
-void GameController::fillFieldWithMens( bool reverted )
+void GameController::fillFieldWithMens( )
 {
     // Fill the field with pieces for 1st player
     for ( int i = 40; i < 64; i += 2 )
     {
         if ( i == 48 ) i++;
         if ( i == 57 ) i--;
-        field[ reverted ? 63-i : i ] = new MenPiece( firstplayer, this, reverted ? 63-i : i );
+        field[ boardRotated ? 63-i : i ] = new MenPiece( firstplayer, this, boardRotated ? 63-i : i );
     }
 
     // Fill the field with pieces for 2nd player
@@ -473,7 +487,7 @@ void GameController::fillFieldWithMens( bool reverted )
     {
         if ( i == 16 ) i++;
         if ( i == 9 ) i--;
-        field[ reverted ? 63-i : i ] = new MenPiece( secondplayer, this, reverted ? 63-i : i );
+        field[ boardRotated ? 63-i : i ] = new MenPiece( secondplayer, this, boardRotated ? 63-i : i );
     }
 }
 

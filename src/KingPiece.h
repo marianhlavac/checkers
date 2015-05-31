@@ -11,8 +11,8 @@ class KingPiece : public Piece
 {
 public:
     KingPiece( Player *owner, GameController *parent, int location );
-    std::pair< std::vector<int>, std::vector<int> > findAllMoves();
-    std::pair< std::vector<int>, std::vector<int> > diagonalSearch( int dirx, int diry );
+    std::pair<std::vector<int>, std::vector<int>> findAllMoves();
+    std::pair<std::vector<int>, std::vector<int>> diagonalSearch( int dirx, int diry );
 };
 
 

@@ -5,6 +5,8 @@
 #include <sstream>
 #include "NetworkPlayer.h"
 
+using namespace std;
+
 NetworkPlayer::NetworkPlayer( GameController *parent ) : Player( parent )
 {
 

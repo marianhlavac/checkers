@@ -4,6 +4,8 @@
 
 #include "exceptions.h"
 
-ConsoleParsingErrorException::ConsoleParsingErrorException( const std::string &reason ) : runtime_error( reason ) { }
+using namespace std;
+
+ConsoleParsingErrorException::ConsoleParsingErrorException( const string &reason ) : runtime_error( reason ) { }
 const char* SingletonInstantiationException::what() const throw() { return "You cannot instantiate a singleton."; }
-CreatingGameFailedException::CreatingGameFailedException( const std::string &reason ) : runtime_error( reason ) { }
+CreatingGameFailedException::CreatingGameFailedException( const string &reason ) : runtime_error( reason ) { }

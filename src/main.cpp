@@ -18,7 +18,7 @@ using namespace std;
 int main( int argc, char *argv[] )
 {
     int gamemode = GameController::MODE_VSLOC, rendermode = 0;
-    std::string loadfilename = "", networkaddress, networkport;
+    string loadfilename = "", networkaddress, networkport;
 
     GameController gameController;
 
@@ -61,7 +61,8 @@ int main( int argc, char *argv[] )
         }
         catch ( CreatingGameFailedException ex )
         {
-            cerr << "Ayy";
+            cerr << "Creating network game failed." << endl;
+            return 2;
         }
     }
     // Load local game

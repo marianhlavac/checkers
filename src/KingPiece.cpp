@@ -4,14 +4,16 @@
 
 #include "KingPiece.h"
 
+using namespace std;
+
 KingPiece::KingPiece( Player *owner, GameController *parent, int location ) : Piece( owner, parent, location, TYPE_KING )
 {
 
 }
 
-std::pair< std::vector<int>, std::vector<int> > KingPiece::findAllMoves( )
+pair< vector<int>, vector<int> > KingPiece::findAllMoves( )
 {
-    std::pair< std::vector<int>, std::vector<int> > movesnjumps;
+    pair< vector<int>, vector<int> > movesnjumps;
 
     // All moves left up
     pair<vector<int>, vector<int>> found = diagonalSearch( -1, -1 );
@@ -36,7 +38,7 @@ std::pair< std::vector<int>, std::vector<int> > KingPiece::findAllMoves( )
     return movesnjumps;
 }
 
-std::pair<std::vector<int>, std::vector<int> > KingPiece::diagonalSearch( int dirx, int diry )
+pair<vector<int>, vector<int> > KingPiece::diagonalSearch( int dirx, int diry )
 {
     char color = owner->color;
     vector<int> moves, jumps;

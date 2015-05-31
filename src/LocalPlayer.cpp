@@ -9,6 +9,8 @@
 #include "MenPiece.h"
 #include "KingPiece.h"
 
+using namespace std;
+
 #define SPECIAL_COMMANDS_ALLOWED true
 
 LocalPlayer::LocalPlayer( GameController *parent ) : Player( parent )
