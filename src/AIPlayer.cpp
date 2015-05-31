@@ -1,6 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    AIPlayer.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class AIPlayer
+ *
+ * This file contains prototype of AIPlayer class
+ */
 
 #include <iostream>
 #include <cstdlib>
@@ -24,8 +30,8 @@ pair<int, int> AIPlayer::WaitForInput( )
     parent->delay( 2 );
 
     // Choose random turn
-    int idx = rand() % (parent->possibleTurns.size() - 1);
-    return parent->possibleTurns.at( this ).at( idx );
+    int idx = rand() % (parent->possibleMoves.size() - 1);
+    return parent->possibleMoves.at( this ).at( idx );
 }
 
 void AIPlayer::informMove(int from, int to) { }

@@ -1,6 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    LocalPlayer.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class LocalPlayer
+ *
+ * This file contains prototype of LocalPlayer class
+ */
 
 #include <iostream>
 #include <cstdlib>
@@ -29,8 +35,8 @@ pair<int, int> LocalPlayer::WaitForInput( )
     // Command for choosing random move
     if ( from == "random" || from == "rand" || from == "r" )
     {
-        int idx = rand() % (parent->possibleTurns.size() - 1);
-        return parent->possibleTurns.at( this ).at( idx );
+        int idx = rand() % (parent->possibleMoves.size() - 1);
+        return parent->possibleMoves.at( this ).at( idx );
     }
 
     // Command for saving the game
@@ -73,7 +79,7 @@ pair<int, int> LocalPlayer::WaitForInput( )
         // Special debugging command, rpt - refreshpossibleturns
         if ( from == "rpt" )
         {
-            parent->findPossibleTurns( parent->onTurn );
+            parent->findPossibleMoves(parent->onTurn);
             return make_pair( -1, -1 );
         }
     }

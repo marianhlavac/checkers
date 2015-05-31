@@ -1,4 +1,12 @@
-
+/**
+ * @file    NetworkConnection.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class NetworkConnection
+ *
+ * This file contains prototype of NetworkConnection class
+ */
 
 #include "NetworkConnection.h"
 

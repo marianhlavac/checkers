@@ -1,6 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    UIRenderer.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class UIRenderer
+ *
+ * This file contains prototype of UIRenderer class
+ */
 
 #include <iostream>
 #include <string>
@@ -58,7 +64,7 @@ void UIRenderer::redraw( ) const
     if ( DEBUG_SHOW_MOVES )
     {
         wcout << endl << endl << wstring( LEFT_MARGIN , ' ' ) << L"--- Possible moves: " << wstring( 27, '-') << endl;
-        for ( pair<int,int> move : parent->possibleTurns[ parent->onTurn ] )
+        for ( pair<int,int> move : parent->possibleMoves[ parent->onTurn ] )
             wcout << Console::translateCoordsW( move.first ) << L" -> " << Console::translateCoordsW( move.second ) << L", ";
     }
 
@@ -188,5 +194,17 @@ void UIRenderer::drawGameoverScreen( ) const
     {
         wcout << wstring( parent->winner->name.begin(), parent->winner->name.end() ) << L" WINS!" << endl;
     }
+
+}
+
+void UIRenderer::drawConnectionScreen( string port ) const {
+
+    wcout << endl <<
+             wstring( 6, ' ' ) << L"/" << endl;
+    wcout << wstring( 6, ' ' ) << L"|" << wstring( 3, ' ' ) << L"Waiting for a client to connect..." << endl;
+    wcout << wstring( 6, ' ' ) << L"|" << wstring( 3, ' ' ) << L"" << endl;
+    wcout << wstring( 6, ' ' ) << L"|" << wstring( 3, ' ' ) << L"To run a client, use:" << endl;
+    wcout << wstring( 6, ' ' ) << L"|" << wstring( 7, ' ' ) << L"./checkers --versus-network --ip [yourip] --port " << wstring( port.begin(), port.end() ) << endl;
+    wcout << wstring( 6, ' ' ) << L"\\" << endl << endl;
 
 }

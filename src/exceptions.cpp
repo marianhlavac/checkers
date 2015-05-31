@@ -1,6 +1,12 @@
-//
-// Created by majko on 31.5.15.
-//
+/**
+ * @file    exceptions.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementations of exception classes
+ *
+ * This file contains prototypes of all exception classes
+ */
 
 #include "exceptions.h"
 

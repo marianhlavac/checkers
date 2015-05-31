@@ -1,6 +1,12 @@
-//
-// Created by Marián on 21. 5. 2015.
-//
+/**
+ * @file    MenPiece.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class MenPiece
+ *
+ * This file contains prototype of MenPiece class
+ */
 
 #include "MenPiece.h"
 

@@ -1,7 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
-
+/**
+ * @file    Piece.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class Piece
+ *
+ * This file contains prototype of Piece class
+ */
 
 #include <stdexcept>
 #include "Piece.h"

@@ -1,6 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    NetworkPlayer.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class NetworkPlayer
+ *
+ * This file contains prototype of NetworkPlayer class
+ */
 
 #include <sstream>
 #include "NetworkPlayer.h"

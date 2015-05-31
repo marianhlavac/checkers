@@ -1,3 +1,11 @@
+/**
+ * @file    main.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Main file
+ */
+
 #include <cstdio>
 #include <iostream>
 #include <stdexcept>

@@ -1,6 +1,13 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    GameController.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class GameController
+ *
+ * This file contains prototype of GameController class
+ */
+
 #include <ctime>
 #include <iostream>
 #include <stdexcept>
@@ -35,15 +42,15 @@ void GameController::tick()
     bool jumpAvailable = false;
 
     // Find all possible moves / jumps and set as state
-    possibleTurns.clear();
-    findPossibleTurns( firstplayer, firstplayer == onTurn ? &jumpAvailable : nullptr );
-    findPossibleTurns( secondplayer, secondplayer == onTurn ? &jumpAvailable : nullptr );
+    possibleMoves.clear();
+    findPossibleMoves(firstplayer, firstplayer == onTurn ? &jumpAvailable : nullptr);
+    findPossibleMoves(secondplayer, secondplayer == onTurn ? &jumpAvailable : nullptr);
 
     // Check game end conditions
-    if ( numOfPossibleTurns( firstplayer ) == 0 )
+    if (numOfPossibleMoves(firstplayer) == 0 )
     {
         // It could be draw
-        if ( numOfPossibleTurns( secondplayer ) == 0 )
+        if (numOfPossibleMoves(secondplayer) == 0 )
         {
             gameOver( nullptr );
             return;
@@ -52,7 +59,7 @@ void GameController::tick()
         gameOver( secondplayer );
         return;
     }
-    else if ( numOfPossibleTurns( secondplayer ) == 0 )
+    else if (numOfPossibleMoves(secondplayer) == 0 )
     {
         gameOver( firstplayer );
         return;
@@ -180,6 +187,9 @@ void GameController::prepareNewNetworkGame( string & address, string & port )
             port.c_str()
     );
 
+    // Server have to wait, so display instructions
+    if ( isServer ) renderer->drawConnectionScreen( port );
+
     // Make connection between players
     if ( ! net->makeConnection() ) throw CreatingGameFailedException( "Could not create a connection between" );
     wcout << L"Connection established" << endl;
@@ -299,7 +309,7 @@ void GameController::gameOver( Player * winner )
 
 bool GameController::isTurnValid( pair<int, int> turn ) const
 {
-    return find( possibleTurns.at(onTurn).begin(), possibleTurns.at(onTurn).end(), turn ) != possibleTurns.at(onTurn).end();
+    return find( possibleMoves.at(onTurn).begin(), possibleMoves.at(onTurn).end(), turn ) != possibleMoves.at(onTurn).end();
 }
 
 void GameController::discardAnyBetween( int from, int to )
@@ -323,7 +333,7 @@ bool GameController::isJumpSequence( )
     bool isJump = false;
 
     // Refresh possible turns
-    findPossibleTurns( onTurn, &isJump );
+    findPossibleMoves(onTurn, &isJump);
 
     // If any jump available, it's sequence
     return isJump;
@@ -352,25 +362,9 @@ Piece *GameController::getPieceRelative( int from, int byx, int byy ) const
 {
     return getPiece( from + byx + ( byy * 8 ) );
 }
-
-int GameController::numOfPossibleTurns( ) const
+int GameController::numOfPossibleMoves(Player *player) const
 {
-    return possibleTurns.at(firstplayer).size() + possibleTurns.at(secondplayer).size();
-}
-
-int GameController::numOfPossibleTurns( Player *player ) const
-{
-    return possibleTurns.at(player).size();
-}
-
-int GameController::getMoveDirection( int from, int to ) const
-{
-    pair<int,int> fromxy = make_pair( from % 8, from / 8 ),
-            toxy = make_pair( to % 8, to / 8 );
-
-    return toxy.first > fromxy.first ?
-           ( toxy.second > fromxy.second ? 1 : 0 ) :
-           ( toxy.second > fromxy.second ? 2 : 3 );
+    return possibleMoves.at(player).size();
 }
 
 void GameController::setPieceRelative( int from, int byx, int byy, Piece * piece )
@@ -379,14 +373,6 @@ void GameController::setPieceRelative( int from, int byx, int byy, Piece * piece
         this->field[ from + byx + ( byy * 8 ) ] = piece;
     else
         throw runtime_error("Accessing non-existent place in field");
-}
-
-int GameController::getMoveMagnitude( int from, int to ) const
-{
-    pair<int,int> fromxy = make_pair( from % 8, from / 8 ),
-            toxy = make_pair( to % 8, to / 8 );
-
-    return (int)sqrt( pow( abs( fromxy.first - toxy.first ), 2 ) + pow( abs( fromxy.second - toxy.second ) , 2 ) );
 }
 
 void GameController::conversionToKings( )
@@ -420,7 +406,7 @@ bool GameController::outOfFieldRelative( int from, int byx, int byy ) const
             from + byx < 0 || from + byx > 63 || (from + byx) / 8 != from / 8;
 }
 
-void GameController::findPossibleTurns( Player * player, bool * isJumps )
+void GameController::findPossibleMoves(Player *player, bool *isJumps)
 {
     vector<pair<int,int>> moves, jumps;
 
@@ -440,7 +426,7 @@ void GameController::findPossibleTurns( Player * player, bool * isJumps )
     }
 
     // If there is any possible jump, moves can't be done
-    possibleTurns[ player ] = jumps.size() > 0 ? jumps : moves;
+    possibleMoves[ player ] = jumps.size() > 0 ? jumps : moves;
     if ( isJumps != nullptr ) *isJumps = jumps.size() > 0;
 }
 

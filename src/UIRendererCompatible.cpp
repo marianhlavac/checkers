@@ -1,6 +1,12 @@
-//
-// Created by Marián on 30. 5. 2015.
-//
+/**
+ * @file    UIRendererCompatible.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class UIRendererCompatible
+ *
+ * This file contains prototype of UIRendererCompatible class
+ */
 
 #include "UIRendererCompatible.h"
 

@@ -1,6 +1,12 @@
-//
-// Created by Marián on 11. 5. 2015.
-//
+/**
+ * @file    Console.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class Console
+ *
+ * This file contains prototype of Console class
+ */
 
 #include <iostream>
 #include <string>

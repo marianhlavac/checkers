@@ -1,6 +1,12 @@
-//
-// Created by Marián on 29. 5. 2015.
-//
+/**
+ * @file    Savefile.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class Savefile
+ *
+ * This file contains prototype of Savefile class
+ */
 
 #include <sstream>
 #include "Savefile.h"

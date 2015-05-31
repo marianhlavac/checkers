@@ -1,6 +1,12 @@
-//
-// Created by Marián on 13. 5. 2015.
-//
+/**
+ * @file    UIRendererUnicode.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class UIRendererUnicode
+ *
+ * This file contains prototype of UIRendererUnicode class
+ */
 
 #include "UIRendererUnicode.h"
 

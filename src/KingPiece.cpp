@@ -1,6 +1,12 @@
-//
-// Created by Marián on 21. 5. 2015.
-//
+/**
+ * @file    KingPiece.cpp
+ * @author  Marián Hlaváč
+ * @date    May, 2015
+ * @bug     No known bugs.
+ * @brief   Implementation of class KingPiece
+ *
+ * This file contains prototype of KingPiece class
+ */
 
 #include "KingPiece.h"
 
