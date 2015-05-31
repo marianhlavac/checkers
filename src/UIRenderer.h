@@ -74,6 +74,9 @@ public:
     /** Constructor with default character setup */
     UIRenderer( GameController * parent );
 
+    /** Destructor */
+    ~UIRenderer( );
+
     /**
      * Redraws the screen
      */

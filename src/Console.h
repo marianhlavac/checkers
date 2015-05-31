@@ -32,9 +32,11 @@ public:
      * @param[out] loadfile File used to load the game from
      * @param[out] networkaddress Network address
      * @param[out] networkport Network port
+     * @param[out] nick P1 nick
+     * @param[out] nick2 P2 nick
      */
     static void parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, std::string &loadfile,
-                            std::string &networkaddress, std::string & networkport );
+                            std::string &networkaddress, std::string & networkport, std::string & nick, std::string & nick2 );
 
     /**
      * Dequeues next command from specified queue. Shortcut

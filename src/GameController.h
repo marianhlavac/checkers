@@ -38,7 +38,7 @@ public:
             MODE_VSNET = 2;
 
     /** Number of instances */
-    static int instances;
+    static int instances = 0;
 
     /** Game mode */
     int gameMode = MODE_NOTSET;
@@ -47,7 +47,7 @@ public:
     int ticks = 0;
 
     /** Indicates if game has ended */
-    bool gameHasEnded;
+    bool gameHasEnded = false;
 
     /** Indicates if current turn is jump sequence */
     bool jumpSequence = false;
@@ -65,16 +65,16 @@ public:
     Player * winner = nullptr;
 
     /** Selected renderer */
-    UIRenderer * renderer;
+    UIRenderer * renderer = nullptr;
 
     /** All possible moves of both players */
     std::map<Player*, std::vector<std::pair<int,int>>> possibleMoves;
 
     /** Player 1 */
-    Player * firstplayer;
+    Player * firstplayer = nullptr;
 
     /** Player 2 */
-    Player * secondplayer;
+    Player * secondplayer = nullptr;
 
     /** Network connection */
     NetworkConnection * net = nullptr;
@@ -85,10 +85,16 @@ public:
     /** Default constructor */
     GameController( );
 
+    /** Destructor */
+    ~GameController( );
+
     /**
      * Prepares new local game.
+     *
+     * @param nick Nickname of player 1
+     * @param nick2 Nickname of player 2
      */
-    void prepareNewGame( );
+    void prepareNewGame( std::string nick, std::string nick2 );
 
     /**
      * Loads previously saved local/ai game from file using Savefile class.
@@ -103,8 +109,10 @@ public:
      *
      * @param address IP address
      * @param port Network port
+     * @param nick Nickname of player 1
+     * @param nick2 Nickname of player 2
      */
-    void prepareNewNetworkGame( std::string & address, std::string & port );
+    void prepareNewNetworkGame( std::string & address, std::string & port, std::string nick, std::string nick2 );
 
     /**
      * Tick method - todo: ted fakt ne

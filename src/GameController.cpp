@@ -37,6 +37,17 @@ GameController::GameController()
     if ( ++instances > 1 ) throw SingletonInstantiationException();
 }
 
+GameController::~GameController()
+{
+    delete firstplayer;
+    delete secondplayer;
+    delete[] field;
+
+    if ( gameMode == MODE_VSNET ) delete net;
+
+    delete renderer;
+}
+
 void GameController::tick()
 {
     bool jumpAvailable = false;
@@ -78,8 +89,10 @@ void GameController::tick()
         // If input is ( -2, -2 ), it's signal for game quit
         if ( inputTurn == pair<int,int>( -2, -2 ) )
         {
+            if ( dynamic_cast<LocalPlayer*>(onTurn) == nullptr ) wcout << L"The other player decided to surrender." << endl;
             wcout << L"Exiting game..." << endl;
             gameHasEnded = true;
+            ( firstplayer == onTurn ? secondplayer : firstplayer )->informMove( inputTurn.first, inputTurn.second );
             break;
         }
 
@@ -133,7 +146,7 @@ void GameController::delay( int s )
     { }
 }
 
-void GameController::prepareNewGame( )
+void GameController::prepareNewGame( string nick, string nick2 )
 {
     wcout << L"Preparing a local game..." << endl;
 
@@ -156,8 +169,9 @@ void GameController::prepareNewGame( )
     secondplayer->color = 'b';
 
     // Set players names
-    firstplayer->name = "Player 1";
-    secondplayer->name = "Player 2";
+    firstplayer->name = nick;
+    secondplayer->name = nick2;
+    if ( gameMode == MODE_VSAI ) secondplayer->name = "AI player";
 
     // Create field of pieces
     field = new Piece*[64];
@@ -170,7 +184,7 @@ void GameController::prepareNewGame( )
     onTurn = firstplayer;
 }
 
-void GameController::prepareNewNetworkGame( string & address, string & port )
+void GameController::prepareNewNetworkGame( string & address, string & port, string nick, string nick2 )
 {
     wcout << L"Preparing a network game..." << endl;
 
@@ -221,7 +235,7 @@ void GameController::prepareNewNetworkGame( string & address, string & port )
         // Create first player
         firstplayer = new LocalPlayer( this );
         firstplayer->color = 'w';
-        firstplayer->name = "Player 1";
+        firstplayer->name = nick;
 
         // Create netGame ID
         netGameId = rand() % 65535;
@@ -229,13 +243,13 @@ void GameController::prepareNewNetworkGame( string & address, string & port )
         // Send info about me
         net->sendMessage( "w;" + firstplayer->name + ";7;" + to_string( netGameId ) );
 
-        string received, nick; char color; int hisnetGameId;
+        string received, rnick; char color; int hisnetGameId;
 
         // Wait for data from client about him
         net->receive( received );
 
         // Parse received data
-        parseNetInitData( received, color, nick, hisnetGameId );
+        parseNetInitData( received, color, rnick, hisnetGameId );
 
         if ( netGameId != hisnetGameId )
             throw CreatingGameFailedException( "Invalid netGameId received" );
@@ -243,30 +257,30 @@ void GameController::prepareNewNetworkGame( string & address, string & port )
         // Create second player
         secondplayer = new NetworkPlayer( this );
         secondplayer->color = color;
-        secondplayer->name = nick;
+        secondplayer->name = rnick;
 
 
     }
     else
     {
-        string received, nick;
+        string received, rnick;
         char color;
 
         // Wait for data from server
         net->receive( received );
 
         // Parse received data
-        parseNetInitData( received, color, nick, netGameId );
+        parseNetInitData( received, color, rnick, netGameId );
 
         // Create first player
         firstplayer = new NetworkPlayer( this );
         firstplayer->color = color;
-        firstplayer->name = nick;
+        firstplayer->name = rnick;
 
         // Create second player
         secondplayer = new LocalPlayer( this );
         secondplayer->color = color == 'w' ? 'b' : 'w';
-        secondplayer->name = "Player 2";
+        secondplayer->name = nick;
 
         // Send info about me
         net->sendMessage( string( 1, secondplayer->color ) + ";" + secondplayer->name + ";7;" + to_string( netGameId ) );
@@ -357,11 +371,11 @@ void GameController::setPiece( int index, Piece *piece )
     else
         throw runtime_error("Accessing non-existent place in field");
 }
-
 Piece *GameController::getPieceRelative( int from, int byx, int byy ) const
 {
     return getPiece( from + byx + ( byy * 8 ) );
 }
+
 int GameController::numOfPossibleMoves(Player *player) const
 {
     return possibleMoves.at(player).size();

@@ -26,14 +26,14 @@ using namespace std;
 int main( int argc, char *argv[] )
 {
     int gamemode = GameController::MODE_VSLOC, rendermode = 0;
-    string loadfilename = "", networkaddress, networkport;
+    string loadfilename = "", networkaddress, networkport, nick = "Player 1", nick2 = "Player 2";
 
     GameController gameController;
 
     // Parse command line arguments
     try
     {
-        Console::parseCmdln( argc, argv, gamemode, rendermode, loadfilename, networkaddress, networkport );
+        Console::parseCmdln( argc, argv, gamemode, rendermode, loadfilename, networkaddress, networkport, nick, nick2 );
     }
     catch ( ConsoleParsingErrorException ex )
     {
@@ -65,7 +65,7 @@ int main( int argc, char *argv[] )
     {
         try
         {
-            gameController.prepareNewNetworkGame(networkaddress, networkport);
+            gameController.prepareNewNetworkGame( networkaddress, networkport, nick, nick2 );
         }
         catch ( CreatingGameFailedException ex )
         {
@@ -91,7 +91,7 @@ int main( int argc, char *argv[] )
     // Create new localgame
     else
     {
-        gameController.prepareNewGame();
+        gameController.prepareNewGame( nick, nick2 );
     }
 
     wcout << L"Game ready..." << endl;
@@ -104,7 +104,7 @@ int main( int argc, char *argv[] )
         gameController.tick();
     }
 
-    gameController.delay( 4 );
+    gameController.delay( 2 );
 
     return 0;
 

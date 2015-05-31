@@ -14,6 +14,7 @@
 #include "UIRenderer.h"
 #include "GameController.h"
 #include "Console.h"
+#include "LocalPlayer.h"
 
 using namespace std;
 
@@ -47,6 +48,11 @@ UIRenderer::UIRenderer( GameController * parent ) :
     wcout << L"Default UI Renderer initialized..." << endl;
 }
 
+UIRenderer::~UIRenderer()
+{
+    delete[] logoLines;
+}
+
 void UIRenderer::redraw( ) const
 {
     // Clear screen
@@ -69,8 +75,17 @@ void UIRenderer::redraw( ) const
             wcout << Console::translateCoordsW( move.first ) << L" -> " << Console::translateCoordsW( move.second ) << L", ";
     }
 
+    // Instructions
+    if ( parent->ticks < 1 )
+    {
+        wcout << endl << endl << wstring( LEFT_MARGIN , ' ' ) << L"--- How to play: " << wstring( 27, '-') << endl
+                << wstring( LEFT_MARGIN , ' ' ) << " Input format is \"XX XX\" where XX is A0 - H8. Type quit or q to quit the game.";
+    }
+
     // Draw input prompt
-    wcout << endl << endl << wstring( LEFT_MARGIN , ' ' ) << L"--- Your turn: " << wstring( 32, '-')
+    wcout << endl << endl << wstring( LEFT_MARGIN , ' ' );
+    if ( dynamic_cast<LocalPlayer*>(parent->onTurn) != nullptr ) wcout << L"--- Your turn: "; else wcout << L"--- Waiting for the other player... ";
+    wcout << wstring( 32, '-')
         << endl << wstring( LEFT_MARGIN - 1, ' ' ) << ( parent->invalidInput ? INVALID_INPUT_CHAR : L' ' )
         << L' ' << PROMPT_CHAR << L' ';
 }

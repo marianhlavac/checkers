@@ -19,7 +19,7 @@
 using namespace std;
 
 void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode, string &loadfile,
-                          string &networkaddress, string & networkport )
+                          string &networkaddress, string & networkport, string & nick, string & nick2 )
 {
     bool gamemodeSet = false, rendermodeSet = false, fileLoaded = false;
     string ip = "0.0.0.0", port = "0";
@@ -119,6 +119,16 @@ void Console::parseCmdln( int argc, char *argv[], int &gameMode, int &renderMode
                 if ( port == "" ) throw ConsoleParsingErrorException( "Network port must be specified for this gamemode" );
             }
             else throw ConsoleParsingErrorException( "Game mode must be set to versus network before setting network port." );
+        }
+        else if ( command == "--nick" )
+        {
+            nick = getNextCommand( parsedCommands );
+            if ( nick == "" ) throw ConsoleParsingErrorException( "You must specify the nickname." );
+        }
+        else if ( command == "--nick2" )
+        {
+            nick2 = getNextCommand( parsedCommands );
+            if ( nick2 == "" ) throw ConsoleParsingErrorException( "You must specify the nickname." );
         }
         else
         {

@@ -38,7 +38,7 @@ pair<int, int> NetworkPlayer::WaitForInput( )
         return make_pair( -6, -6 );
 
     // All seems correct, rotate the input and pass
-    return make_pair( 63 - from, 63 - to );
+    return from > 0 && to > 0 ? make_pair( 63 - from, 63 - to ) : make_pair( from, to );
 }
 
 void NetworkPlayer::parseIncoming(string &recv, int &from, int &to, int &ticknum, int &netgameid)
