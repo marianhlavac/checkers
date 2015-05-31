@@ -15,7 +15,7 @@
 #include "UIRenderer.h"
 
 /**
- * Compatible UI renderer not using extended characters and colors
+ * Compatible UI renderer not using extended characters
  */
 class UIRendererCompatible : public UIRenderer
 {

@@ -15,7 +15,7 @@
 #include "UIRenderer.h"
 
 /**
- * Unicode UI Renderer using unicode characters and colors
+ * Unicode UI Renderer using unicode characters
  */
 class UIRendererUnicode : public UIRenderer
 {

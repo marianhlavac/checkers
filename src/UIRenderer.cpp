@@ -24,12 +24,11 @@ using namespace std;
 UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
                         charType bking, charType nonepcs, charType outsprtr, charType insprtr,
                         charType waiting, charType prompt, charType invalidinp,
-                        charType infoboxsprtr,  charType usericon, bool allowColors)
+                        charType infoboxsprtr,  charType usericon )
         : parent( parent ), WMEN_CHAR( wmen ), BMEN_CHAR( bmen ), WKING_CHAR( wking ), BKING_CHAR( bking ),
           NONE_PCS_CHAR( nonepcs ), OUT_SPRTR_CHAR( outsprtr ), IN_SPRTR_CHAR( insprtr ), WAITING_CHAR( waiting ),
           PROMPT_CHAR( prompt ), INVALID_INPUT_CHAR( invalidinp ), INFOBOX_SEP_CHAR( infoboxsprtr ),
-          USERICON_CHAR( usericon ),
-          allowColors( allowColors )
+          USERICON_CHAR( usericon )
 {
     // Initialize logo lines
     logoLines = new wstring[6] {
@@ -43,7 +42,7 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
 }
 
 UIRenderer::UIRenderer( GameController * parent ) :
-        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', '-',  true )
+        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', '-' )
 {
     wcout << L"Default UI Renderer initialized..." << endl;
 }

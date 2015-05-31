@@ -26,8 +26,8 @@ UIRendererUnicode::UIRendererUnicode( GameController *parent ) :
                 L'\u25BB', // prompt
                 L'\u26CC', // invalidinp
                 L'\u2503', // infoboxsprt
-                L'\u26C4', // usericon
-                true )
+                L'\u26C4'  // usericon
+                )
 {
 
 }

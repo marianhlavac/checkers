@@ -38,7 +38,7 @@ public:
             MODE_VSNET = 2;
 
     /** Number of instances */
-    static int instances = 0;
+    static int instances;
 
     /** Game mode */
     int gameMode = MODE_NOTSET;

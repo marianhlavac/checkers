@@ -21,7 +21,7 @@ typedef wchar_t charType;
 class GameController;
 
 /**
- * Default UI renderer using extended characters and colors
+ * Default UI renderer using extended characters
  */
 class UIRenderer
 {
@@ -62,14 +62,10 @@ public:
     /** Character - user icon */
     const charType USERICON_CHAR;
 
-    /** Indicates if colors are allowed */
-    const bool allowColors;
-
     /** Default constructor */
     UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
                 charType bking, charType nonepcs, charType outsprtr, charType insprtr,
-                charType waiting, charType prompt, charType invalidinp, charType infoboxsprtr, charType usericon,
-                bool allowColors );
+                charType waiting, charType prompt, charType invalidinp, charType infoboxsprtr, charType usericon );
 
     /** Constructor with default character setup */
     UIRenderer( GameController * parent );

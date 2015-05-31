@@ -26,8 +26,8 @@ UIRendererCompatible::UIRendererCompatible( GameController *parent ) :
                 '>', // prompt
                 '!', // invalidinp
                 '|', // infoboxsprt
-                '-', // usericon
-                false )
+                '-' // usericon
+                )
 {
 
 }
