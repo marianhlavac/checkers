@@ -13,7 +13,21 @@
 using namespace std;
 
 UIRendererCompatible::UIRendererCompatible( GameController *parent ) :
-        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', '#', '#', '.', '>', '!', '|', false )
+        UIRenderer(
+                parent,
+                'w', // wmen
+                'b', // bmen
+                'W', // wking
+                'B', // bking
+                '!', // nonpcs
+                '#', // outsprtr
+                '#', // insprtr
+                '.', // waiting
+                '>', // prompt
+                '!', // invalidinp
+                '|', // infoboxsprt
+                '-', // usericon
+                false )
 {
 
 }

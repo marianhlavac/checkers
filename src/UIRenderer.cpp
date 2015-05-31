@@ -18,15 +18,16 @@
 using namespace std;
 
 #define LEFT_MARGIN         6
-#define DEBUG_SHOW_MOVES    true
+#define DEBUG_SHOW_MOVES    false
 
 UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
                         charType bking, charType nonepcs, charType outsprtr, charType insprtr,
                         charType waiting, charType prompt, charType invalidinp,
-                        charType infoboxsprtr, bool allowColors)
+                        charType infoboxsprtr,  charType usericon, bool allowColors)
         : parent( parent ), WMEN_CHAR( wmen ), BMEN_CHAR( bmen ), WKING_CHAR( wking ), BKING_CHAR( bking ),
           NONE_PCS_CHAR( nonepcs ), OUT_SPRTR_CHAR( outsprtr ), IN_SPRTR_CHAR( insprtr ), WAITING_CHAR( waiting ),
           PROMPT_CHAR( prompt ), INVALID_INPUT_CHAR( invalidinp ), INFOBOX_SEP_CHAR( infoboxsprtr ),
+          USERICON_CHAR( usericon ),
           allowColors( allowColors )
 {
     // Initialize logo lines
@@ -34,14 +35,14 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
             L"      _               _",
             L"     | |             | |",
             L"  ___| |__   ___  ___| | _____ _ __ ___",
-            L" / __| '_ \\ / _ \\/ __| |/ / _ \\ '__/ __| ",
-            L"| (__| | | |  __/ (__|   <  __/ |  \\__ \\ ",
+            L" / __| '_ \\ / _ \\/ __| |/ / _ \\ '__/ __|       ",
+            L"| (__| | | |  __/ (__|   <  __/ |  \\__ \\       ",
             L" \\___|_| |_|\\___|\\___|_|\\_\\___|_|  |___/  v1.0 ",
     };
 }
 
 UIRenderer::UIRenderer( GameController * parent ) :
-        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', true )
+        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', '-',  true )
 {
     wcout << L"Default UI Renderer initialized..." << endl;
 }
@@ -74,11 +75,6 @@ void UIRenderer::redraw( ) const
         << L' ' << PROMPT_CHAR << L' ';
 }
 
-GameController *UIRenderer::getParent( ) const
-{
-    return parent;
-}
-
 void UIRenderer::drawHeader( ) const
 {
     for ( int i = 0; i < 6; i++ )
@@ -86,8 +82,12 @@ void UIRenderer::drawHeader( ) const
         wcout << wstring( LEFT_MARGIN, ' ' );
         drawLogoLine( i );
 
-        if ( i == 1 ) wcout << wstring( 32, ' ' ) << L"Tick " << parent->ticks;
-        if ( i == 3 ) wcout << wstring( 12, ' ' ) << (parent->gameMode == parent->MODE_VSLOC ? L"Versus local" : L"Versus AI");
+        wstring mode = L"2P HOTSEAT";
+        if ( parent->gameMode == GameController::MODE_VSAI ) mode = L"1P VS AI";
+        if ( parent->gameMode == GameController::MODE_VSNET ) mode = L"2P NET";
+
+        if ( i == 3 || i == 5 ) wcout << wstring( 4, ' ' ) << INFOBOX_SEP_CHAR;
+        if ( i == 4 ) wcout << wstring( 4, ' ' ) << INFOBOX_SEP_CHAR << L"  " << mode;
 
         wcout << endl;
     }
@@ -169,8 +169,14 @@ void UIRenderer::drawFieldLine( int line ) const
 void UIRenderer::drawInfoboxLine( int line ) const
 {
     wcout << INFOBOX_SEP_CHAR << ' ';
-    if ( line == 0 ) wcout << L"This is infobox";
-    if ( line == 2 ) wcout << wstring(parent->onTurn->name.begin(), parent->onTurn->name.end() ) << L" is on turn.";
+
+    if ( line == 1 ) wcout << wstring(parent->onTurn->name.begin(), parent->onTurn->name.end() ) << L" is on turn.";
+
+    if ( line == 3 ) wcout << (wchar_t)( parent->onTurn == parent->firstplayer ? WAITING_CHAR : ' ' ) << ' ' <<
+                USERICON_CHAR << L"   " << wstring( parent->firstplayer->name.begin(), parent->firstplayer->name.end() );
+    if ( line == 4 ) wcout << L"       vs ";
+    if ( line == 5 ) wcout << (wchar_t)( parent->onTurn == parent->secondplayer ? WAITING_CHAR : ' ' ) << ' ' <<
+                USERICON_CHAR << L"   " << wstring( parent->secondplayer->name.begin(), parent->secondplayer->name.end() );
 }
 
 void UIRenderer::drawGameoverScreen( ) const

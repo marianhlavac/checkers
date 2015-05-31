@@ -13,7 +13,21 @@
 using namespace std;
 
 UIRendererUnicode::UIRendererUnicode( GameController *parent ) :
-        UIRenderer( parent, 'i', 'z', 'B', 'W', '!', (charType) 177, (charType) 177, '.', u'\u058D', '!', '|', true)
+        UIRenderer(
+                parent,
+                L'\u26C2', // wmen
+                L'\u26C0', // bmen
+                L'\u26C3', // wking
+                L'\u26C1', // bking
+                'E',       // nonpcs
+                L'\u2591', // outsprtr
+                L'\u2591', // insprtr
+                L'\u25F7', // waiting
+                L'\u25BB', // prompt
+                L'\u26CC', // invalidinp
+                L'\u2503', // infoboxsprt
+                L'\u26C4', // usericon
+                true )
 {
 
 }

@@ -59,13 +59,16 @@ public:
     /** Character - infobox separator character */
     const charType INFOBOX_SEP_CHAR;
 
+    /** Character - user icon */
+    const charType USERICON_CHAR;
+
     /** Indicates if colors are allowed */
     const bool allowColors;
 
     /** Default constructor */
     UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,
                 charType bking, charType nonepcs, charType outsprtr, charType insprtr,
-                charType waiting, charType prompt, charType invalidinp, charType infoboxsprtr,
+                charType waiting, charType prompt, charType invalidinp, charType infoboxsprtr, charType usericon,
                 bool allowColors );
 
     /** Constructor with default character setup */
