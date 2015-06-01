@@ -1,6 +1,6 @@
 NAME        = checkers
 CC          = g++
-CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long -g
+CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long -O0 -ggdb
 SOURCES     = AIPlayer.cpp Console.cpp exceptions.cpp GameController.cpp KingPiece.cpp LocalPlayer.cpp MenPiece.cpp NetworkConnection.cpp NetworkPlayer.cpp Piece.cpp Player.cpp Savefile.cpp UIRenderer.cpp UIRendererCompatible.cpp UIRendererUnicode.cpp
 OBJECTS     = $(SOURCES:.cpp=.o)
 
@@ -23,7 +23,9 @@ copysplash:
 	@echo "Splash file copied into build directory..."
 
 run:
-	@echo "This program requires you to use parameters. Please run it with ./checkers"
+	@echo "This program requires parameters to start with options. See the documentation or readme."
+	@read -p "The program will now run with default options. Press [Enter] to continue..."
+	@./{$NAME}
 
 clean:
 	@rm -f $(OBJECTS) $(NAME) checkers-splash.txt
