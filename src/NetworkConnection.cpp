@@ -66,9 +66,6 @@ bool NetworkConnection::makeConnection()
 
 }
 
-/**
- * @author Láda
- */
 int NetworkConnection::prepareServerSocket(const char *listenAddr)
 {
     struct addrinfo * ai;
@@ -100,9 +97,6 @@ int NetworkConnection::prepareServerSocket(const char *listenAddr)
     return sock;
 }
 
-/**
- * @author taky láda
- */
 int NetworkConnection::prepareClientSocket( const char *listenAddr )
 {
     struct addrinfo * ai;
