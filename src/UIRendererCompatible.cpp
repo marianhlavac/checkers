@@ -1,3 +1,7 @@
+#include "UIRendererCompatible.h"
+
+using namespace std;
+
 /**
  * @file    UIRendererCompatible.cpp
  * @author  Marián Hlaváč
@@ -8,9 +12,9 @@
  * This file contains prototype of UIRendererCompatible class
  */
 
-#include "UIRendererCompatible.h"
-
-using namespace std;
+UIRendererCompatible::~UIRendererCompatible() {
+        delete[] logoLines;
+}
 
 UIRendererCompatible::UIRendererCompatible( GameController *parent ) :
         UIRenderer(

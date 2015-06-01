@@ -22,6 +22,9 @@ public:
     /** Default constructor */
     NetworkPlayer( GameController * parent );
 
+    /** Destructor */
+    ~NetworkPlayer( );
+
     /**
      * Waits for user input. Returns his move.
      * Receives on net socket.

@@ -24,6 +24,10 @@ LocalPlayer::LocalPlayer( GameController *parent ) : Player( parent )
 
 }
 
+LocalPlayer::~LocalPlayer() {
+
+}
+
 pair<int, int> LocalPlayer::WaitForInput( )
 {
     string from = "", to = "";

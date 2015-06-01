@@ -17,3 +17,8 @@ Player::Player( GameController * parent ) : parent( parent )
 {
     color = 'n';
 }
+
+Player::~Player()
+{
+
+}

@@ -29,3 +29,8 @@ void Piece::moveTo( int newLocation )
 Piece::Piece( Player *owner, GameController *parent, int location, int type ) :
         owner( owner ), parent( parent ), type( type ), location( location )
 { }
+
+Piece::~Piece()
+{
+
+}

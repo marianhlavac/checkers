@@ -36,6 +36,9 @@ public:
     /** Default constructor */
     Player( GameController *parent );
 
+    /** Destructor */
+    virtual ~Player( );
+
     /**
      * Waits for user input. Returns his move.
      *

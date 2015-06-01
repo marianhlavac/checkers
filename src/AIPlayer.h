@@ -22,6 +22,9 @@ public:
     /** Default constructor */
     AIPlayer( GameController * parent );
 
+    /** Destructor */
+    ~AIPlayer( );
+
     /**
      * Waits for user input. Returns his move.
      * This is pseudo-AI, using dumb tactic, choosing

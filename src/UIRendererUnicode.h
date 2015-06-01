@@ -21,6 +21,7 @@ class UIRendererUnicode : public UIRenderer
 {
 public:
     UIRendererUnicode( GameController * parent );
+    ~UIRendererUnicode( );
 };
 
 

@@ -36,6 +36,7 @@ GameController::GameController()
 {
     if ( ++instances > 1 ) throw SingletonInstantiationException();
 
+    // Initialize variables
     gameMode = MODE_NOTSET;
     ticks = 0;
     gameHasEnded = false;
@@ -49,12 +50,23 @@ GameController::GameController()
     secondplayer = nullptr;
     net = nullptr;
     netGameId = -1;
+
+    // Initialize field
+    field = new Piece*[64];
+    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
 }
 
 GameController::~GameController()
 {
+    // Free the memory
     delete firstplayer;
     delete secondplayer;
+
+    for ( int i = 0; i < 64; i++ )
+    {
+        if ( field[i] != nullptr ) delete field[i];
+    }
+
     delete[] field;
 
     if ( gameMode == MODE_VSNET ) delete net;
@@ -187,10 +199,6 @@ void GameController::prepareNewGame( string nick, string nick2 )
     secondplayer->name = nick2;
     if ( gameMode == MODE_VSAI ) secondplayer->name = "AI player";
 
-    // Create field of pieces
-    field = new Piece*[64];
-    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
-
     // Fill the field
     fillFieldWithMens( );
 
@@ -300,10 +308,6 @@ void GameController::prepareNewNetworkGame( string & address, string & port, str
         net->sendMessage( string( 1, secondplayer->color ) + ";" + secondplayer->name + ";7;" + to_string( netGameId ) );
     }
 
-    // Create field of pieces
-    field = new Piece*[64];
-    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
-
     // Fill field
     fillFieldWithMens();
 
@@ -318,10 +322,6 @@ bool GameController::loadGame( istream & loadInfo )
     wcout << L"Loading the game from save file..." << endl;
 
     gameHasEnded = false;
-
-    // Create field of pieces
-    field = new Piece*[64];
-    for ( int i = 0; i < 64; i++ ) field[i] = nullptr;
 
     return Savefile::load( loadInfo, this );
 }
@@ -494,6 +494,7 @@ void GameController::fillFieldWithMens( )
         if ( i == 48 ) i++;
         if ( i == 57 ) i--;
         field[ boardRotated ? 63-i : i ] = new MenPiece( firstplayer, this, boardRotated ? 63-i : i );
+        wcout << L"Adding 1P piece @ " << (boardRotated ? 63-i : i) << endl;
     }
 
     // Fill the field with pieces for 2nd player
@@ -502,6 +503,7 @@ void GameController::fillFieldWithMens( )
         if ( i == 16 ) i++;
         if ( i == 9 ) i--;
         field[ boardRotated ? 63-i : i ] = new MenPiece( secondplayer, this, boardRotated ? 63-i : i );
+        wcout << L"Adding 2P piece @ " << (boardRotated ? 63-i : i) << endl;
     }
 }
 

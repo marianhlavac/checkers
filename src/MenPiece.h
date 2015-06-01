@@ -25,6 +25,9 @@ public:
     /** Default constructor */
     MenPiece( Player *owner, GameController *parent, int location );
 
+    /** Destructor */
+    ~MenPiece( );
+
     /**
      * Finds all moves possible with this piece
      *

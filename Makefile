@@ -1,25 +1,35 @@
 NAME        = checkers
 CC          = g++
-CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long
+CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long -g
 SOURCES     = AIPlayer.cpp Console.cpp exceptions.cpp GameController.cpp KingPiece.cpp LocalPlayer.cpp MenPiece.cpp NetworkConnection.cpp NetworkPlayer.cpp Piece.cpp Player.cpp Savefile.cpp UIRenderer.cpp UIRendererCompatible.cpp UIRendererUnicode.cpp
 OBJECTS     = $(SOURCES:.cpp=.o)
 
-all: compile
+all: compile doc
 
-compile: $(NAME)
-	@echo Compiled sucessfully!
+compile: copysplash $(NAME)
+	@echo Built. Compiled sucessfully!
+	@echo "  - Run the game with './checkers' command"
 
 $(NAME): $(OBJECTS)
-	@echo Linking and compiling main file...
+	@echo Linking and compiling executable...
 	@$(CC) $(CCFLAGS) $^ src/main.cpp -o $@
 
 %.o: src/%.cpp
-	@echo "Compiling $< ..."
+	@echo "Building object $< ..."
 	@$(CC) $(CCFLAGS) -c $<
 
+copysplash:
+	@cp src/checkers-splash.txt ./checkers-splash.txt
+	@echo "Splash file copied into build directory..."
+
 run:
-	./$(NAME)
+	@echo "This program requires you to use parameters. Please run it with ./checkers"
 
 clean:
-	rm -f $(OBJECTS) $(NAME)
-	echo Directory cleaned.
+	@rm -f $(OBJECTS) $(NAME) checkers-splash.txt
+	@echo Directory cleaned.
+
+doc:
+	@echo Generating documentation to directory doc/ , give me a second...
+	@doxygen Doxyfile
+	@echo Done

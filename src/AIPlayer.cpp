@@ -19,6 +19,10 @@ AIPlayer::AIPlayer( GameController *parent ) : Player( parent )
 
 }
 
+AIPlayer::~AIPlayer() {
+
+}
+
 pair<int, int> AIPlayer::WaitForInput( )
 {
     /*

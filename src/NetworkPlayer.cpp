@@ -13,10 +13,9 @@
 
 using namespace std;
 
-NetworkPlayer::NetworkPlayer( GameController *parent ) : Player( parent )
-{
+NetworkPlayer::NetworkPlayer( GameController *parent ) : Player( parent ) { }
 
-}
+NetworkPlayer::~NetworkPlayer( ) { }
 
 pair<int, int> NetworkPlayer::WaitForInput( )
 {

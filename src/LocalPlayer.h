@@ -22,6 +22,9 @@ public:
     /** Default constructor */
     LocalPlayer( GameController * parent );
 
+    /** Destructor */
+    ~LocalPlayer( );
+
     /**
      * Waits for user input. Returns his move.
      * Reads from stdin.

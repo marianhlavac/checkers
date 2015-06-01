@@ -17,6 +17,10 @@ MenPiece::MenPiece( Player *owner, GameController *parent, int location ) : Piec
 
 }
 
+MenPiece::~MenPiece() {
+
+}
+
 pair< vector<int>, vector<int> > MenPiece::findAllMoves( )
 {
   char color = owner->color;

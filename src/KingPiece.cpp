@@ -17,6 +17,10 @@ KingPiece::KingPiece( Player *owner, GameController *parent, int location ) : Pi
 
 }
 
+KingPiece::~KingPiece() {
+
+}
+
 pair< vector<int>, vector<int> > KingPiece::findAllMoves( )
 {
     pair< vector<int>, vector<int> > movesnjumps;

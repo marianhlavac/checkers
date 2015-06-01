@@ -24,6 +24,9 @@ public:
     /** Default constructor */
     KingPiece( Player *owner, GameController *parent, int location );
 
+    /** Destructor */
+    ~KingPiece( );
+
     /**
      * Finds all moves possible with this piece.
      *

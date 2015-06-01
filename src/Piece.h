@@ -44,6 +44,9 @@ public:
     /** Default constructor */
     Piece( Player *owner, GameController *parent, int location, int type );
 
+    /** Destructor */
+    virtual ~Piece( );
+
     /**
      * Moves the piece on another location in the game field
      *

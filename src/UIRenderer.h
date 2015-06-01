@@ -71,7 +71,7 @@ public:
     UIRenderer( GameController * parent );
 
     /** Destructor */
-    ~UIRenderer( );
+    virtual ~UIRenderer( );
 
     /**
      * Redraws the screen

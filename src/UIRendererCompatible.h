@@ -24,6 +24,9 @@ public:
      * Default constructor setting up the compatible characters
      */
     UIRendererCompatible( GameController * parent );
+
+    /** Destructor */
+    ~UIRendererCompatible( );
 };
 
 

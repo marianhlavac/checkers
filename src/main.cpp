@@ -19,12 +19,13 @@
 #include "UIRendererUnicode.h"
 #include "UIRendererCompatible.h"
 
-#define  SPLASH_SCREEN_TIME  1
+#define  SPLASH_SCREEN_TIME  4
 
 using namespace std;
 
 int main( int argc, char *argv[] )
 {
+
     int gamemode = GameController::MODE_VSLOC, rendermode = 0;
     string loadfilename = "", networkaddress, networkport, nick = "Player 1", nick2 = "Player 2";
 
@@ -52,7 +53,6 @@ int main( int argc, char *argv[] )
         gameController.renderer = new UIRendererCompatible( &gameController );
     else
         gameController.renderer = new UIRenderer( &gameController );
-
 
 
     // Show splash screen
