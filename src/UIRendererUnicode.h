@@ -20,7 +20,10 @@
 class UIRendererUnicode : public UIRenderer
 {
 public:
+    /** Default constructor */
     UIRendererUnicode( GameController * parent );
+
+    /** Destructor */
     ~UIRendererUnicode( );
 };
 

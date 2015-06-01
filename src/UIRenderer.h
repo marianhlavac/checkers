@@ -15,6 +15,7 @@
 
 #include "GameController.h"
 
+/** Character type */
 typedef wchar_t charType;
 
 // Forward declaration to avoid circular dependency problems
@@ -139,6 +140,9 @@ protected:
      */
     virtual void drawInfoboxLine( int line ) const;
 
+    /**
+     * Initializes array of lines for constructing logo
+     */
     void initLogoLines();
 };
 

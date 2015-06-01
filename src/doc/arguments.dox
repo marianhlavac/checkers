@@ -1,0 +1,79 @@
+/**
+*@page arguments Command arguments
+*
+* <table>
+<tr>
+    <th>
+        Local multiplayer
+    </th>
+    <td>
+        ./checkers
+    </td>
+</tr>
+<tr>
+    <th>
+        Singleplayer (1P vs AI)
+    </th>
+    <td>
+        ./checkers --versus-ai
+    </td>
+</tr>
+<tr>
+    <th>
+        Multiplayer over network ( host )
+    </th>
+    <td>
+        ./checkers --versus-network --host --port [port]
+    </td>
+</tr>
+<tr>
+    <th>
+        Multiplayer over network ( client )
+    </th>
+    <td>
+        ./checkers --versus-network --ip [ip] --port [port]
+    </td>
+</tr>
+<tr>
+    <th>
+        &nbsp;
+    </th>
+    <td>
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <th>
+        Setting a nick
+    </th>
+    <td>
+        ./checkers --nick YourNick
+    </td>
+</tr>
+<tr>
+    <th>
+        Setting a nick for second player (when playing 1v1 local)
+    </th>
+    <td>
+        ./checkers --nick YourNick --nick2 HisNick
+    </td>
+</tr>
+<tr>
+    <th>
+        Unicode renderer
+    </th>
+    <td>
+        ./checkers --unicode
+    </td>
+</tr>
+<tr>
+    <th>
+        Compatible renderer (eg. for older SSH, telnets or whatever)
+    </th>
+    <td>
+        ./checkers --compatible
+    </td>
+</tr>
+</table>
+*
+*/

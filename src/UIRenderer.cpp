@@ -18,7 +18,10 @@
 
 using namespace std;
 
+/** Left margin */
 #define LEFT_MARGIN         6
+
+/** Shows possible moves for debugging purposes */
 #define DEBUG_SHOW_MOVES    false
 
 UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, charType wking,

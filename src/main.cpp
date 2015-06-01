@@ -19,10 +19,17 @@
 #include "UIRendererUnicode.h"
 #include "UIRendererCompatible.h"
 
+/** How long the splash screen will be displayed */
 #define  SPLASH_SCREEN_TIME  4
 
 using namespace std;
 
+/**
+ * Main
+ *
+ * @param argc argc
+ * @param argv argv
+ */
 int main( int argc, char *argv[] )
 {
 
@@ -54,8 +61,8 @@ int main( int argc, char *argv[] )
     else
         gameController.renderer = new UIRenderer( &gameController );
 
-
     // Show splash screen
+    gameController.renderer->flushScreen();
     gameController.renderer->showSplashScreen();
     gameController.delay( SPLASH_SCREEN_TIME );
     gameController.renderer->flushScreen();
@@ -73,6 +80,7 @@ int main( int argc, char *argv[] )
             return 2;
         }
     }
+
     // Load local game
     else if ( loadfilename != "" )
     {

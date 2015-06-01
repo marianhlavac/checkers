@@ -17,6 +17,7 @@
 
 using namespace std;
 
+/** Allows special commands to be used */
 #define SPECIAL_COMMANDS_ALLOWED true
 
 LocalPlayer::LocalPlayer( GameController *parent ) : Player( parent )

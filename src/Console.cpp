@@ -154,16 +154,6 @@ string Console::getNextCommand( queue<string> &commands )
     } else return "";
 }
 
-
-
-string Console::translateCoords( int location )
-{
-    stringstream ss;
-    int col = location % 8, row = location / 8;
-    ss << (char)( 65 + col ) << (row + 1);
-    return ss.str();
-}
-
 int Console::translateCoords( string location )
 {
     int col = -1, row = -1;

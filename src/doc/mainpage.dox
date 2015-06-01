@@ -1,0 +1,18 @@
+/**
+*@mainpage
+*
+* Seminar project for PA2 subject on FIT CTU written in C++. Basic checkers game with single player vs AI, local and network multiplayer modes.
+*
+* @section req Requirements
+*
+* @li g++ min. 4.6
+* @li doxygen (optional)
+*
+* @section install How to install
+* Compile the project using **make** tool.
+*
+* @code
+* $ make
+* @endcode
+*
+*/

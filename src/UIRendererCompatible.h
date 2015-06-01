@@ -21,7 +21,7 @@ class UIRendererCompatible : public UIRenderer
 {
 public:
     /**
-     * Default constructor setting up the compatible characters
+     * Default constructor
      */
     UIRendererCompatible( GameController * parent );
 

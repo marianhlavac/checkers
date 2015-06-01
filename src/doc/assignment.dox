@@ -1,0 +1,14 @@
+/**
+*@page assignment Assignment (czech)
+*
+* Klasická hra Dáma s monostmi:
+*
+* @li pro dva hráèe na jednom PC
+* @li pro dva hráèe na více PC (podmínkou je naprogramovat síové rozhraní)
+* @li pro jednoho hráèe proti poèítaèi
+*
+* Hra musí umoòovat ukládání a naèítání rozehrané partie do souboru (vytvoøte vhodnı formát), kontrolovat dodrování pravidel a oznamovat ukonèení hry obìma soupeøùm.
+*
+* Tento text má rámcovì vymezit téma semestrální práce. Podrobnìjší podmínky viz. Edux.
+
+*/

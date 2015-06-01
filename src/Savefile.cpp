@@ -20,7 +20,10 @@
 
 using namespace std;
 
+/** Save file version */
 #define SAVEGAMEFILE_VERSION    1
+
+/** Save file separator */
 #define SPR                     ';'
 
 string Savefile::create( GameController *gameController )

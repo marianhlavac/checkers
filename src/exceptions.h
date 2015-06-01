@@ -19,6 +19,7 @@
 class ConsoleParsingErrorException : public std::runtime_error
 {
 public:
+    /** Default constructor */
     ConsoleParsingErrorException( const std::string &reason );
 };
 
@@ -27,6 +28,8 @@ public:
  */
 class SingletonInstantiationException : public std::exception
 {
+public:
+    /** Method returns reason of exception */
     virtual const char* what() const throw();
 };
 
@@ -36,6 +39,7 @@ class SingletonInstantiationException : public std::exception
 class CreatingGameFailedException : public std::runtime_error
 {
 public:
+    /** Default constructor */
     CreatingGameFailedException( const std::string &reason );
 };
 

@@ -49,14 +49,6 @@ public:
     /**
      * Translates coords from numeric format to string format [A0-H8]
      *
-     * @param location Location in numeric format
-     * @return Location in string format [A0-H8]
-     */
-    static std::string translateCoords( int location );
-
-    /**
-     * Translates coords from numeric format to string format [A0-H8]
-     *
      * @param location Location in string format [A0-H8]
      * @return Location in numeric format
      */
