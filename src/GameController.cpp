@@ -66,7 +66,7 @@ GameController::~GameController()
         if ( field[i] != nullptr ) delete field[i];
     delete[] field;
 
-    if ( gameMode == MODE_VSNET && net != nullptr ) delete net;
+    if ( gameMode == MODE_VSNET ) delete net;
 
     if ( renderer != nullptr ) delete renderer;
 }
@@ -220,6 +220,8 @@ void GameController::prepareNewNetworkGame( string & address, string & port, str
             port.c_str()
     );
 
+    this->net = net;
+
     // Server have to wait, so display instructions
     if ( isServer ) renderer->drawConnectionScreen( port );
 
@@ -309,7 +311,6 @@ void GameController::prepareNewNetworkGame( string & address, string & port, str
     fillFieldWithMens();
 
     // Game is ready to play... (whew!)
-    this->net = net;
     onTurn = firstplayer;
 
 }
