@@ -62,9 +62,13 @@ pair<vector<int>, vector<int> > KingPiece::diagonalSearch( int dirx, int diry )
 
         if ( piece != nullptr )
         {
+
             // We can jump over enemy's piece
             if ( piece->owner->color != color )
+            {
+                if ( jumpingover ) break;
                 jumpingover = true;
+            }
 
             // But we can't jump over own pieces
             else
