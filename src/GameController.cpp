@@ -407,10 +407,10 @@ void GameController::conversionToKings( )
     for ( int i = 0; i < 7; i++ )
     {
         if ( field[ i ] != nullptr )
-        if ( field[ i ]->owner == firstplayer && field[ i ]->type == field[ i ]->TYPE_MEN )
+        if ( field[ i ]->owner == ( boardRotated ? secondplayer : firstplayer ) && field[ i ]->type == field[ i ]->TYPE_MEN )
         {
             delete field[ i ];
-            field[ i ] = new KingPiece( firstplayer, this, i );
+            field[ i ] = new KingPiece( ( boardRotated ? secondplayer : firstplayer ), this, i );
         }
     }
 
@@ -418,10 +418,10 @@ void GameController::conversionToKings( )
     for ( int i = 56; i < 63; i++ )
     {
         if ( field[ i ] != nullptr )
-        if ( field[ i ]->owner == secondplayer )
+        if ( field[ i ]->owner == ( boardRotated ? firstplayer : secondplayer ) )
         {
             delete field[ i ];
-            field[ i ] = new KingPiece( secondplayer, this, i );
+            field[ i ] = new KingPiece( ( boardRotated ? firstplayer : secondplayer ), this, i );
         }
     }
 }
