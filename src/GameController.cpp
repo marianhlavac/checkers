@@ -465,7 +465,7 @@ void GameController::saveGame( )
     // Open file
     time_t t; time( &t );
     char buf[128];
-    strftime( buf, 128, "save-%Y%m%d%H%M%S.txt", gmtime( &t ) );
+    strftime( buf, 128, "save-%Y%m%d%H%M%S.sav", gmtime( &t ) );
     file.open( buf );
 
     if ( ! file.fail() )
