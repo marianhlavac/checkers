@@ -1,20 +1,25 @@
 NAME        = checkers
 CC          = g++
-CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long
-SOURCES     = src/AIPlayer.cpp src/Console.cpp src/exceptions.cpp src/GameController.cpp src/KingPiece.cpp src/LocalPlayer.cpp src/MenPiece.cpp src/NetworkConnection.cpp src/NetworkPlayer.cpp src/Piece.cpp src/Player.cpp src/Savefile.cpp src/UIRenderer.cpp src/UIRendererCompatible.cpp src/UIRendererUnicode.cpp
+CCFLAGS     = -std=c++11 -Wall -pedantic -Wno-long-long
+SOURCES     = AIPlayer.cpp Console.cpp exceptions.cpp GameController.cpp KingPiece.cpp LocalPlayer.cpp MenPiece.cpp NetworkConnection.cpp NetworkPlayer.cpp Piece.cpp Player.cpp Savefile.cpp UIRenderer.cpp UIRendererCompatible.cpp UIRendererUnicode.cpp
 OBJECTS     = $(SOURCES:.cpp=.o)
+
+all: compile
 
 compile: $(NAME)
 	@echo Compiled sucessfully!
 
 $(NAME): $(OBJECTS)
-	@echo Linking...
-	$(CC) $(CCFLAGS) $^ -o $@
+	@echo Linking and compiling main file...
+	@$(CC) $(CCFLAGS) $^ src/main.cpp -o $@
 
-%.o: %.cpp
+%.o: src/%.cpp
 	@echo "Compiling $< ..."
-	$(CC) $(CCFLAGS) -c $<
+	@$(CC) $(CCFLAGS) -c $<
+
+run:
+	./$(NAME)
 
 clean:
-	rm -f $(OBJS) $(NAME)
+	rm -f $(OBJECTS) $(NAME)
 	echo Directory cleaned.
