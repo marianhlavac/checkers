@@ -115,7 +115,9 @@ public:
     void prepareNewNetworkGame( std::string & address, std::string & port, std::string nick, std::string nick2 );
 
     /**
-     * Tick method - todo: ted fakt ne
+     * Tick method directs the whole game process. It's supposed to be called
+     * in infinite loop and makes the one step forwards. It checks win condition, waits for player input,
+     * manupilates the game field and redraws the screen.
      */
     void tick( );
 
