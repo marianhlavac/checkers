@@ -35,6 +35,20 @@ int GameController::instances = 0;
 GameController::GameController()
 {
     if ( ++instances > 1 ) throw SingletonInstantiationException();
+
+    gameMode = MODE_NOTSET;
+    ticks = 0;
+    gameHasEnded = false;
+    jumpSequence = false;
+    invalidInput = false;
+    boardRotated = false;
+    onTurn = nullptr;
+    winner = nullptr;
+    renderer = nullptr;
+    firstplayer = nullptr;
+    secondplayer = nullptr;
+    net = nullptr;
+    netGameId = -1;
 }
 
 GameController::~GameController()
@@ -196,7 +210,7 @@ void GameController::prepareNewNetworkGame( string & address, string & port, str
 
     // Create connection
     NetworkConnection *net = new NetworkConnection(
-            isServer ? NetworkConnection::CONNECTION_SERVER : NetworkConnection::CONNECTION_CLIENT,
+            isServer ? 2 : 1,
             address.c_str(),
             port.c_str()
     );

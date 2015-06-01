@@ -25,11 +25,31 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
                         charType bking, charType nonepcs, charType outsprtr, charType insprtr,
                         charType waiting, charType prompt, charType invalidinp,
                         charType infoboxsprtr,  charType usericon )
-        : parent( parent ), WMEN_CHAR( wmen ), BMEN_CHAR( bmen ), WKING_CHAR( wking ), BKING_CHAR( bking ),
+        : WMEN_CHAR( wmen ), BMEN_CHAR( bmen ), WKING_CHAR( wking ), BKING_CHAR( bking ),
           NONE_PCS_CHAR( nonepcs ), OUT_SPRTR_CHAR( outsprtr ), IN_SPRTR_CHAR( insprtr ), WAITING_CHAR( waiting ),
           PROMPT_CHAR( prompt ), INVALID_INPUT_CHAR( invalidinp ), INFOBOX_SEP_CHAR( infoboxsprtr ),
-          USERICON_CHAR( usericon )
+          USERICON_CHAR( usericon ), parent( parent )
 {
+    // Initialize logo lines
+    initLogoLines();
+}
+
+UIRenderer::UIRenderer( GameController * parent ) : WMEN_CHAR( 'w' ), BMEN_CHAR( 'b' ), WKING_CHAR( 'W' ), BKING_CHAR( 'B' ),
+                                                    NONE_PCS_CHAR( '!' ), OUT_SPRTR_CHAR( L'\u2591' ), IN_SPRTR_CHAR( L'\u2591' ), WAITING_CHAR( '.' ),
+                                                    PROMPT_CHAR( '>' ), INVALID_INPUT_CHAR( '!' ), INFOBOX_SEP_CHAR( '|' ),
+                                                    USERICON_CHAR( '-' ), parent( parent )
+{
+
+    initLogoLines();
+    wcout << L"Default UI Renderer initialized..." << endl;
+}
+
+UIRenderer::~UIRenderer()
+{
+    delete[] logoLines;
+}
+
+void UIRenderer::initLogoLines() {
     // Initialize logo lines
     logoLines = new wstring[6] {
             L"      _               _",
@@ -39,17 +59,6 @@ UIRenderer::UIRenderer( GameController * parent, charType wmen, charType bmen, c
             L"| (__| | | |  __/ (__|   <  __/ |  \\__ \\       ",
             L" \\___|_| |_|\\___|\\___|_|\\_\\___|_|  |___/  v1.0 ",
     };
-}
-
-UIRenderer::UIRenderer( GameController * parent ) :
-        UIRenderer( parent, 'w', 'b', 'W', 'B', '!', L'\u2591', L'\u2591', '.', '>', '!', '|', '-' )
-{
-    wcout << L"Default UI Renderer initialized..." << endl;
-}
-
-UIRenderer::~UIRenderer()
-{
-    delete[] logoLines;
 }
 
 void UIRenderer::redraw( ) const

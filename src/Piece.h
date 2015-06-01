@@ -60,7 +60,7 @@ public:
 
 protected:
     /** Piece location in game field */
-    int location = -1;
+    int location;
 };
 
 

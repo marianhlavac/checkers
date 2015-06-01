@@ -41,46 +41,46 @@ public:
     static int instances;
 
     /** Game mode */
-    int gameMode = MODE_NOTSET;
+    int gameMode;
 
     /** Number of ticks elapsed */
-    int ticks = 0;
+    int ticks;
 
     /** Indicates if game has ended */
-    bool gameHasEnded = false;
+    bool gameHasEnded;
 
     /** Indicates if current turn is jump sequence */
-    bool jumpSequence = false;
+    bool jumpSequence;
 
     /** Indicates if used sent invalid input */
-    bool invalidInput = false;
+    bool invalidInput;
 
     /** Indicates if board is rotated ( by 180 dgr ) */
-    bool boardRotated = false;
+    bool boardRotated;
 
     /** Player on turn */
-    Player * onTurn = nullptr;
+    Player * onTurn;
 
     /** Winner of the game */
-    Player * winner = nullptr;
+    Player * winner;
 
     /** Selected renderer */
-    UIRenderer * renderer = nullptr;
+    UIRenderer * renderer;
 
     /** All possible moves of both players */
     std::map<Player*, std::vector<std::pair<int,int>>> possibleMoves;
 
     /** Player 1 */
-    Player * firstplayer = nullptr;
+    Player * firstplayer;
 
     /** Player 2 */
-    Player * secondplayer = nullptr;
+    Player * secondplayer;
 
     /** Network connection */
-    NetworkConnection * net = nullptr;
+    NetworkConnection * net;
 
     /** Game ID used for network connection communication */
-    int netGameId = -1;
+    int netGameId;
 
     /** Default constructor */
     GameController( );

@@ -31,7 +31,7 @@ public:
     std::string name;
 
     /** Player color */
-    char color = 'w';
+    char color;
 
     /** Default constructor */
     Player( GameController *parent );

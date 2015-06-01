@@ -138,6 +138,8 @@ protected:
      * @param line Line number
      */
     virtual void drawInfoboxLine( int line ) const;
+
+    void initLogoLines();
 };
 
 

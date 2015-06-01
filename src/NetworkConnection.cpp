@@ -18,7 +18,8 @@ using namespace std;
 NetworkConnection::NetworkConnection( int connectionType, char * address, char * port ) :
         connectionType( connectionType ), address( address ), port( port )
 {
-
+    connectionType = CONNECTION_NONE;
+    socketnum = -1;
 }
 NetworkConnection::NetworkConnection( int connectionType, const char * address, const char * port ) :
         connectionType( connectionType )

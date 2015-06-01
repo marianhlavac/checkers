@@ -103,10 +103,10 @@ public:
 
 private:
     /** Connection type */
-    int connectionType = CONNECTION_NONE;
+    int connectionType;
 
     /** Socket number */
-    int socketnum = -1;
+    int socketnum;
 
     /** Network address */
     char * address;

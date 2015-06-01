@@ -15,5 +15,5 @@ using namespace std;
 
 Player::Player( GameController * parent ) : parent( parent )
 {
-
+    color = 'n';
 }
