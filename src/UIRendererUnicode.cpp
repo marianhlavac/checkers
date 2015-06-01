@@ -32,6 +32,6 @@ UIRendererUnicode::UIRendererUnicode( GameController *parent ) :
 
 }
 
-UIRendererUnicode::~UIRendererUnicode( )  {
-        delete[] logoLines;
+UIRendererUnicode::~UIRendererUnicode( ) {
+
 }

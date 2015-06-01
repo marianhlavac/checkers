@@ -13,7 +13,7 @@ using namespace std;
  */
 
 UIRendererCompatible::~UIRendererCompatible() {
-        delete[] logoLines;
+
 }
 
 UIRendererCompatible::UIRendererCompatible( GameController *parent ) :
