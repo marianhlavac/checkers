@@ -59,19 +59,16 @@ GameController::GameController()
 GameController::~GameController()
 {
     // Free the memory
-    delete firstplayer;
-    delete secondplayer;
+    if ( firstplayer != nullptr ) delete firstplayer;
+    if ( secondplayer != nullptr ) delete secondplayer;
 
     for ( int i = 0; i < 64; i++ )
-    {
         if ( field[i] != nullptr ) delete field[i];
-    }
-
     delete[] field;
 
-    if ( gameMode == MODE_VSNET ) delete net;
+    if ( gameMode == MODE_VSNET && net != nullptr ) delete net;
 
-    delete renderer;
+    if ( renderer != nullptr ) delete renderer;
 }
 
 void GameController::tick()
