@@ -24,8 +24,9 @@ copysplash:
 
 run:
 	@echo "This program requires parameters to start with options. See the documentation or readme."
-	@read -p "The program will now run with default options. Press [Enter] to continue..."
-	@./{$NAME}
+	@echo "The program will start with default options..."
+	@sleep 4
+	@./$(NAME)
 
 clean:
 	@rm -f $(OBJECTS) $(NAME) checkers-splash.txt
