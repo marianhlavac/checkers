@@ -208,7 +208,7 @@ void GameController::prepareNewNetworkGame( string & address, string & port, str
     wcout << L"Preparing a network game..." << endl;
 
     bool isServer = address == "hostinggame";
-    if ( isServer ) address = "127.0.0.1";
+    if ( isServer ) address = "0.0.0.0";
 
     gameHasEnded = false;
     boardRotated = !isServer;
