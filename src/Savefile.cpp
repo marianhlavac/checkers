@@ -52,7 +52,7 @@ string Savefile::create( GameController *gameController )
         }
         else
         {
-            ss << SPR << ( gameController->getPiece( i )->owner == gameController->firstplayer ? 2 : 1 )
+            ss << SPR << ( gameController->getPiece( i )->owner == gameController->secondplayer ? 2 : 1 )
                 << SPR << gameController->getPiece( i )->type;
         }
     }
