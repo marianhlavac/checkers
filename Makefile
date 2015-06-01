@@ -1,5 +1,5 @@
 NAME        = checkers
-CC          = g++-4.6
+CC          = g++
 CCFLAGS     = -std=c++0x -Wall -pedantic -Wno-long-long
 SOURCES     = AIPlayer.cpp Console.cpp exceptions.cpp GameController.cpp KingPiece.cpp LocalPlayer.cpp MenPiece.cpp NetworkConnection.cpp NetworkPlayer.cpp Piece.cpp Player.cpp Savefile.cpp UIRenderer.cpp UIRendererCompatible.cpp UIRendererUnicode.cpp
 OBJECTS     = $(SOURCES:.cpp=.o)
