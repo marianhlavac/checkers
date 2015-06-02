@@ -9,6 +9,8 @@ Seminar project for PA2 subject on FIT CTU written in C++. Basic checkers game w
 ## Requirements
 
  - g++ min. 4.6
+ - sys/socket.h lib
+ - netdb.h (definitions for network database operations ) lib
  - doxygen (optional)
 
 ## How to install
